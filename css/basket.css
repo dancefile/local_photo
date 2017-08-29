@@ -1,0 +1,183 @@
+html,body {
+  font-family: Century Gothic, Helvetica, Arial, sans-serif;
+  background: #000000;
+  color: #FFFFFF;
+  margin: 0px;
+}
+
+a:link,a:visited {
+color: #FFFFFF;
+}
+
+a:hover {
+color: #666666;
+}
+
+.photo {  
+  width: 350px; /* Ширина */
+  margin: 0 10px 10px 0; /* Отступы */
+  padding: 10px 0; /* Поля сверху и снизу */
+  text-align: center; /* Выравнивание по центру */
+  font-size: 14px;
+  display: inline-block; /* Строчно-блочный элемент */
+	border: 1px solid #444444;
+  height: 250px;
+}
+
+.photo .img{
+  float:left;
+}
+
+.link {
+ text-decoration: underline;
+ cursor: pointer; 
+}
+
+.input {
+   border: 1px solid #cccccc;
+   /*border-radius: 0px; 
+   -webkit-border-radius: 3px; 
+   -moz-border-radius: 3px; 
+   -khtml-border-radius: 3px;*/
+   background: #000000 !important; 
+   outline: none;
+   height: 20px; 
+   width: 35px;
+   color: #cccccc; 
+   font-size: 16px; 
+   /*font-family: Tahoma; */
+   padding: 5px;
+}
+
+.i_kom {
+   border: 1px solid #cccccc;
+   /*border-radius: 0px; 
+   -webkit-border-radius: 3px; 
+   -moz-border-radius: 3px; 
+   -khtml-border-radius: 3px;*/
+   background: #000000 !important; 
+   outline: none;
+   height: 28px; 
+   width: 200px;
+   color: #cccccc; 
+   /*font-size: 12px; 
+   font-family: Tahoma; */
+}
+
+.i_mail {
+   border: 1px solid #cccccc;
+   border-radius: 3px; 
+   -webkit-border-radius: 3px; 
+   -moz-border-radius: 3px; 
+   -khtml-border-radius: 3px;
+   background: #000000 !important; 
+   outline: none;
+   height: 25px; 
+   width: 400px;
+   color: #cccccc; 
+   font-size: 18px; 
+   font-family: Tahoma; 
+}
+
+.buttom {
+  font-size: 18px; 
+  cursor: pointer;
+  padding: 10px;
+  width: 300px;
+  background: #24d006;
+}
+
+.crop
+{
+   float: left;
+   overflow: hidden;
+   position: relative;
+   width: 270px;
+   height: 260px;
+}
+
+.crop #img_l
+{
+	/*display: none;*/
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   z-index: 450;
+   display: none;
+}
+.crop #img_z
+{
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   z-index: 400;
+  cursor: zoom-out; 
+}	
+	
+.crop #img
+{
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   z-index: 350;
+ cursor: zoom-in; 
+}	
+
+.curtain {
+	display: none;
+	border:1px solid #000000;
+	background-color: #000000;
+	-moz-opacity: 0.80;
+	opacity: 0.80;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=80);
+	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=80);
+	filter:alpha(opacity=80);
+	position: fixed;
+	top: 0px;
+	left:0px;
+    right:0px;
+    bottom:0px;
+	z-index: 200;
+}
+.modalWindow {
+	display: none;
+	width:300px;
+	height:300px;
+	border:0px solid #FF0000;
+	position: fixed;
+	top: 0px;
+	left:0px;
+	z-index: 300;
+}
+
+.header {
+  height: 130px; /* высота шапки */
+  margin: 0px;
+}
+#fixedBox {
+    /* размеры фиксированного блока */
+    height: 100px;
+    width: 100%;
+    background-color: rgba(00, 00, 00, 0.8); /* Цвет фона */
+    
+   
+    position: fixed;
+    /* отступ сверху когда шапка видна полностью */
+    margin-top: 0px;
+}
+
+#basket h1{
+  text-align:center;
+}
+#move_wrapper{
+	display:none;
+	width: 600px;
+    border: 1px solid silver; /* Параметры границы */
+    padding: 6px; /* Поля вокруг текста */
+   box-shadow: 0 0 10px #FFFFFF;
+   background: #000000;
+	z-index:305;
+	position: fixed;
+    right: 150;
+    top: 80;
+}

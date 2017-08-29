@@ -1,0 +1,28 @@
+.link {
+ text-decoration: underline;
+ cursor: pointer; 
+ }
+
+.link_i {
+ cursor: pointer;
+ vertical-align: middle; 
+ } 
+ 
+#move_wrapper{
+	display:none;
+	width: 600px;
+    border: 1px solid black; /* Параметры границы */
+    padding: 6px; /* Поля вокруг текста */
+   box-shadow: 0 0 10px rgba(0,0,0,0.5);
+   background: #EFEFEF;
+	z-index:999;
+	position: absolute;
+	top: 60px; left: 10px;
+}
+#under{
+height:200px; 
+width: 200px;
+overflow: hidden;
+}
+.checkbox {height: 40px;
+width: 40px;}

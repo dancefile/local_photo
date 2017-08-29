@@ -1,0 +1,275 @@
+#malevich {display: inline-block; width: 100px;margin-left: 10px; height: 30px; vertical-align: middle;}
+.magleft {margin-left: 10px;}
+
+body{
+  font-family: Arial, Century Gothic, Helvetica,  sans-serif;
+}
+
+.link {
+ text-decoration: underline;
+ cursor: pointer; 
+ font-size: 35px;
+ }
+ 
+ .link0 {
+ text-decoration: underline;
+ cursor: pointer; 
+ font-size: 20px;
+ }
+
+.sort {
+ text-decoration: underline;
+ cursor: pointer; 
+ }
+
+
+#move_wrapper{
+    display: none;
+    left: 10%;
+    height: 85%;
+    border: 1px solid silver;
+    padding: 6px;
+    box-shadow: 0 0 10px #FFFFFF;
+    background: #000000;
+    z-index: 305;
+    position: fixed;
+    right: 150;
+    top: 80;
+    overflow: auto;
+}
+
+
+
+
+.redS{background-color: #FF0000;	
+ box-shadow: 0px 0px 30px #FF0000;
+ 
+}
+
+#editBs{
+margin: 5px;
+display: none;
+cursor: pointer;
+}
+
+
+.redB{
+cursor: pointer;
+	background-color: #FF0000;	
+}
+
+.edit{
+
+	background-color: #00ff00;	
+}
+
+
+.inputLink{
+display: none; 	
+}
+
+.imLink {
+vertical-align: middle;
+
+}
+
+html,body {
+background: #000000;
+color: #FFFFFF;
+margin: 0px;
+}
+a:link,a:visited {
+color: #FFFFFF;
+}
+a:hover {
+color: #666666;
+}
+.link1{
+	margin-left: 130px;
+	font-size: 30px;
+  text-decoration: none;
+  line-height: 1.5;
+}
+.style1{
+	font-size:18px;
+}
+#vl-img img {
+cursor: pointer;
+vertical-align: middle;
+margin: 5px;
+padding: 1px;	
+}
+#vl-img .img {
+border: 3px solid #444444;
+}
+#vl-img .img1 {
+border: 3px solid #00BB00;
+}
+
+.crop
+{
+   float: left;
+   overflow: hidden;
+   position: relative;
+   width: 270px;
+   height: 260px;
+}
+
+
+	.zoomout {
+cursor: zoom-out !important; 	
+}
+.crop #img_l
+{
+	/*display: none;*
+	 * cursor: zoom-out; 
+	 *  cursor: zoom-in; 
+	 */
+cursor: zoom-in;
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   z-index: 450;
+  
+}	
+
+.crop #img
+{
+   position: absolute;
+   top: 0px;
+   left: 0px;
+   z-index: 350;
+}	
+
+.curtain {
+	display: none;
+	border:1px solid #000000;
+	background-color: #000000;
+	-moz-opacity: 0.80;
+	opacity: 0.80;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha"(Opacity=80);
+	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=80);
+	filter:alpha(opacity=80);
+	position: fixed;
+	top: 0px;
+	left:0px;
+    right:0px;
+    bottom:0px;
+	z-index: 200;
+}
+.modalWindow {
+	display: none;
+	width:300px;
+	height:300px;
+	border:0px solid #FF0000;
+	position: fixed;
+	top: 0px;
+	left:0px;
+	z-index: 300;
+}
+		
+.g_but{ cursor: pointer; }
+
+#appst {
+    padding: 5px 1px 0px 1px;
+    height: 70px;
+    background: #FDFDFD url('/img/kor.png') no-repeat center bottom;
+    width: 100px;
+    right: 0;
+    top: 0;
+    /*position: fixed;*/
+    z-index: 30;
+    border: 1px solid black;
+    cursor: pointer; 
+    font-size:14px;
+    color:#505860;
+}
+#appst2 {
+    padding: 5px 5px 5px 5px;
+    height: 65px;
+    width: 190px;
+margin-right: 3px;
+    border: 1px solid silver;
+    cursor: pointer; 
+    font-size:14px;
+    color:#505860;
+    float:right;
+}
+.index1 {
+  font-size: 30px;
+  line-height: 1.5;
+}
+
+.header {
+  height: 110px; /* высота шапки */
+  margin: 0px;
+}
+#fixedBox {
+    /* размеры фиксированного блока */
+    height: 100px;
+    width: 100%;
+    background-color: rgba(00, 00, 00, 0.8); /* Цвет фона */
+    
+   
+    position: fixed;
+    /* отступ сверху когда шапка видна полностью */
+    margin-top: 0px;
+}
+
+.tcell-1 {
+	text-align:left;
+}
+
+#fancybox-title-over a{
+	display: block;
+
+}
+
+#fancybox-title-over {
+	  padding-top:10px;
+  font-size:22px;
+  left:0;
+  background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  width: 100%;
+  height: 70px;
+  z-index: 1000;
+}
+
+.style2{
+  color: #a0a0a0;
+  font-size: 16px;
+}
+
+.style2 span{
+  color:#fff;
+}
+
+.header td{
+
+  vertical-align: top;
+}
+
+.header img{
+margin-left:5px;
+padding: 0px;
+margin-top: 3px;
+}
+
+.searchForm{
+  margin-top: 5px;
+ 
+}
+
+.searchForm input{
+  padding: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.btnSearch{
+  background: #b5b5b5;
+  border: none;
+  padding: 9px !important;
+  cursor: pointer;
+}
