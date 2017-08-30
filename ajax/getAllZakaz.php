@@ -10,8 +10,12 @@ if(!$_SESSION['auth'])
 
 <?php
 include_once "../db.php";
-include "../getDownloadPhoto.php";
-$downloadedPhoto = getDownPhoto();
+$downloadedPhoto = array();
+if ($rs = $mysqli->query('select * from down_photo'))
+    while ($line = mysqli_fetch_array($rs))
+    {
+        $downloadedPhoto[$line['photo_id']]=true;
+    }
 if (isset($_GET['payd'])) {if ($_GET['payd']) {$payd=' and oplata!=0';} else {$payd=' and oplata=0';}; } else $payd='';
 if (isset($_GET['ready'])) $ready  =$_GET['ready']; else $ready  ='';
 if (isset($_GET['deleted'])) $deleted = $_GET['deleted']; else $deleted = '';
