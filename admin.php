@@ -1,4 +1,5 @@
 <? 
+dsfsfd
 session_start();
 if(!$_SESSION['auth']) {header("Location: ./admin_auth.php");die();}
 include ('db.php');
