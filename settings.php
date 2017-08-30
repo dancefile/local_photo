@@ -15,8 +15,44 @@ if(isset($_POST['savepass'])) {
 SavePass($_POST['login'], $_POST['pass'], $_POST['id']);
 header("Location: settings.php?a=admin");
 }
+
+
+if(isset($_POST['savefotograf'])){
+$mysqli->query("UPDATE `fotografers` SET kod='".$mysqli->real_escape_string($_POST['kod'])."', name='".$mysqli->real_escape_string($_POST['name'])."' WHERE id = '".$_POST['id']."'");
+header("Location: settings.php?a=fotograf");
+}
+if(isset($_POST['saveurl'])) {
+$_POST['url']=trim($_POST['url']);
+$last=substr($_POST['url'],-1);
+if ($last == "/" || $last == "\\") $_POST['url'] = substr($_POST['url'],0,-1); 
+$mysqli->query("UPDATE `flash` SET url='".$mysqli->real_escape_string($_POST['url'])."' WHERE id = '".$_POST['id']."'");
+header("Location: settings.php?a=flash");
+}
 if(isset($_POST['createuser'])) {
 SaveUser($_POST['newlogin'], $_POST['newpass']);
+}
+if(isset($_POST['createpath'])) {
+$_POST['url']=trim($_POST['newpath']);
+$last=substr($_POST['newpath'],-1);
+if ($last == "/" || $last == "\\") $_POST['newpath'] = substr($_POST['newpath'],0,-1);
+$mysqli->query("INSERT INTO `flash` (url) VALUES('".$_POST['newpath']."')");
+header("Location: settings.php?a=flash");
+}
+if(isset($_POST['createfotograf'])) {
+$mysqli->query("INSERT INTO `fotografers` (kod,name) VALUES('".$_POST['newfotografkod']."','".$_POST['newfotografname']."')");
+header("Location: settings.php?a=fotograf");
+}
+
+if(isset($_GET['delflash'])) 
+{
+	$mysqli->query("DELETE FROM `flash` WHERE id=".$_GET['id']);
+	header("Location: settings.php?a=flash");
+}
+
+if(isset($_GET['delfotograf'])) 
+{
+	$mysqli->query("DELETE FROM `fotografers` WHERE id=".$_GET['id']);
+	header("Location: settings.php?a=fotograf");
 }
 ?>
 <!DOCTYPE html>
@@ -63,6 +99,22 @@ body {
  while ($row = mysqli_fetch_array($stmt)) {
  echo "<form action='' method='POST'>$kkey<input type='hidden' value='".$row['kkey']."' name='kkey'/><input type='text' value='".$row['value']."' name='value'/><input type='submit' name='save' value='Сохранить'/></form>";
 }}
+
+
+	function Selectfotografers($id)
+{global $mysqli;
+ if ($stmt=$mysqli->query("SELECT * FROM `fotografers` WHERE id='$id'"))
+ while ($row = mysqli_fetch_array($stmt)) {
+ echo "<form action='' method='POST'><input type='text' name='kod' value='".$row['kod'] ."'/><input type='text' name='name' value='".$row['name'] ."'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='savefotograf' value='Сохранить'/></form>";
+}}
+	
+	function SelectFlash($id)
+{global $mysqli;
+ if ($stmt=$mysqli->query("SELECT * FROM `flash` WHERE id='$id'"))
+ while ($row = mysqli_fetch_array($stmt)) {
+ echo "<form action='' method='POST'><input type='text' name='url' value='".$row['url'] ."'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='saveurl' value='Сохранить'/></form>";
+}}
+
 	function SelectPass($id)
 {global $mysqli;
  if ($stmt=$mysqli->query("SELECT * FROM pass WHERE id='$id'"))
@@ -116,23 +168,51 @@ echo "</table>";
 
 		break;
 	case 'flash':
+	echo "<form method='POST'><input type='text' name='newpath' placeholder='Новый путь для скачки'><input type='submit' name='createpath' value='Добавить'/></form>";
+if ($result = $mysqli->query('SELECT * FROM `flash`'))
+	echo "<table><tr><th>Путь</th><th></th></tr>";
+while ($line = mysqli_fetch_array($result)) {
+	echo "<tr><td>".$line['url']."</td><td><a href='settings.php?a=s&id=".$line['id']."'/>Изменить</a></td><td><a href='settings.php?delflash&id=".$line['id']."'/>Удалить</a></td></tr><br>";
+};
+echo "</table>"; 			
 		
+		
+		break;
+	case 'fotograf':
+	echo "<form method='POST'><input type='text' name='newfotografkod' placeholder='Новый код фографа'> <input type='text' name='newfotografname' placeholder='Новое имя фотографа'><input type='submit' name='createfotograf' value='Добавить'/></form>";
+if ($result = $mysqli->query('SELECT * FROM `fotografers`'))
+	echo "<table><tr><th>Код</th><th>имя</th><th></th></tr>";
+while ($line = mysqli_fetch_array($result)) {
+	echo "<tr><td>".$line['kod']."</td><td>".$line['name']."</td><td><a href='settings.php?a=f&id=".$line['id']."'/>Изменить</a></td><td><a href='settings.php?delfotograf&id=".$line['id']."'/>Удалить</a></td></tr><br>";
+};
+echo "</table>"; 			
+		
+			
 		break;		
 	case 'e':
       SelectBd($_GET['kkey']);
 	break;
 	case 'r':
-		SelectPass($_GET['id']);
-		break;
-		case 'y':
-			DeleteUser($_GET['id']);
-			break;
+	  SelectPass($_GET['id']);
+	  break;	
+	  case 's':
+	  SelectFlash($_GET['id']);
+	  break;
+	  case 'f':
+	  Selectfotografers($_GET['id']);
+	  break;	  
+	case 'y':
+	  DeleteUser($_GET['id']);
+	  break;
+	  
+
+	  
 	default: 
 	?>
-	
+<a href="/settings.php?a=flash">Скачка</a><br><br>
+<a href="/settings.php?a=fotograf">Фотографы</a><br><br>	
 <a href="/settings.php?a=admin">Пароли</a><br><br>
- <a href="/settings.php?a=flash">Скачка</a><br><br>
- <a href="/settings.php?a=other">Прочие</a><br><br>	
+<a href="/settings.php?a=other">Прочие</a><br><br>	
 		
 		
 <?		break;
