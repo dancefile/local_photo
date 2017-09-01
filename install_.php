@@ -118,8 +118,9 @@ $mysqli->query("CREATE TABLE `zakaz` (
   `opl_sum` int(11) DEFAULT NULL,
   `del` int(11) DEFAULT '0',
   `mail` varchar(200) DEFAULT NULL,
-  `mailStatus` int(11) NOT NULL DEFAULT '0'
+  `mailStatus` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-//unlink('install.php');
-//header("Location: index.php");
+unlink('install.php');
+header("Location: index.php");

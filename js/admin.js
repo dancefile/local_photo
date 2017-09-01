@@ -129,7 +129,7 @@ success: function(data){
 }});	
 }	
 
-var lastIdMove=3;
+var lastIdMove=0;
 var IdDir='dir0';
 var fotog='';
 

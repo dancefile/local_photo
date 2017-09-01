@@ -54,11 +54,7 @@ break;
 	case 'pm':
 
 if(is_file($line['value'].'/'.substr($url[2], 0, strpos($url[2],'.')))) {	
-exec('C:\Apache24\htdocs\exe\jpeg_exe4.exe '.$line['value'].'/'.substr($url[2], 0, strpos($url[2],'.')).' C:\Apache24\htdocs\pm\\'.$url[2],$str);
-//echo 'C:\Apache24\htdocs\exe\jpeg_exe4.exe '.$line['value'].'/'.substr($url[2], 0, strpos($url[2],'.')).' C:\Apache24\htdocs\pm\\'.$url[2];
-//$f =fopen('error.txt',"a");
-//fwrite($f, 'C:\Apache24\htdocs\exe\jpeg_exe4.exe '.$line['value'].'/'.substr($url[2], 0, strpos($url[2],'.')).' C:\Apache24\htdocs\pm\\'.$url[2]."\r\n");
-//fclose($f);
+exec('C:\Apache24\htdocs\exe\jpeg_exe4.exe "'.$line['value'].'/'.substr($url[2], 0, strpos($url[2],'.')).'" "C:\Apache24\htdocs\pm\\'.$url[2].'"',$str);
 header('Status: 200 Ok');
 header('Content-Type: image/jpeg');
 readfile('C:\Apache24\htdocs\pm\\'.$url[2]);		

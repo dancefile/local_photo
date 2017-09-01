@@ -166,11 +166,7 @@ if ($zapros[0]=='order') {
 	$exif = exif_read_data($link, 0, true);
 	if (isset($exif['EXIF']['DateTimeOriginal'])) {$date=$exif['EXIF']['DateTimeOriginal'];} else {$date=date ("Y-m-d H:i:s", filemtime($link));};	
 
-	exec('C:\Apache24\htdocs\exe\jpeg_exe4.exe '.$link.' '.__DIR__.'\tmp\dancefile'.$i.'.jpg',$str);	
-	//$com = new COM("DynamicWrapperX.2");
-	//$com->Register('Project1.dll', 'mydiv2', 'i=wwwwwll', 'r=l');
-	//$com->mydiv2($link,__DIR__.'\tmp\dancefile'.$i.'.jpg','','','',1200,90);
-	
+	exec('C:\Apache24\htdocs\exe\jpeg_exe4.exe "'.$link.'" "'.__DIR__.'\tmp\dancefile'.$i.'.jpg"',$str);	
 	
 	$image = imagecreatefromjpeg(__DIR__.'\tmp\dancefile'.$i.'.jpg');
     $orig_width=imagesx($image);

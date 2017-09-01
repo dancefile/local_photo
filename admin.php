@@ -23,7 +23,7 @@ include('lang.php');
         ?>; </script>
 	<a href="/">DanceFile</a> | 
 <?
-echo '<a href="/login.php?d=1">'.$_SESSION['login'].' log out</a> | <a href="/settings.php">Настройки</a><br><br>';
+echo '<a href="/login.php?d=1">'.$_SESSION['login'].' log out</a> | <a href="/settings.php">Настройки</a>| <a href="/statistics.php">Статистика</a><br><br>';
 ?>
 <button onclick="renewflash()">Обновить карты</button>
 <table><tr><td valign="top">
