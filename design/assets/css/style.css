@@ -1,0 +1,344 @@
+body{
+    background-color: #201721;
+    background-image: url("../img/background.jpg");
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+::-webkit-scrollbar {width: 12px;height: 5px;}
+::-webkit-scrollbar-track-piece {background:#201721;}
+::-webkit-scrollbar-thumb:vertical {height:5px;background:#272c35;}
+::-webkit-scrollbar-thumb:vertical:hover {background:white;}
+
+
+.is_overlay{ display: block; width: 100%; height: 100%; }
+
+#trailer {
+	position: fixed;
+	top: 0; right: 0; bottom: 0; left: 0;
+    width: 100%; height: 100%;
+	overflow: hidden;
+}
+
+#trailer > video {
+    transition: 1s;
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    overflow: hidden;
+}
+
+nav.navbar {
+    border: none;
+    border-radius: 0px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: white;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: white;
+    -moz-text-shadow:0 0 10px white; 
+    -webkit-text-shadow:0 0 10px white; 
+    text-shadow:0 0 10px white;
+}
+
+.navbar-default .navbar-nav>li>a>.glyphicon-record{
+    color: red;
+    text-shadow: 0 0 10px red;
+    animation: pulse  2s infinite ease-in-out;
+    font-size: 8pt;
+}
+
+@keyframes pulse {
+    from {
+        color: white;
+        text-shadow: 0 0 0px white;
+    }
+    50% {
+        color: red;
+        text-shadow: 0 0 10px red;
+    }
+    to {
+        color: white;
+        text-shadow: 0 0 0px white;
+        animation: pulse  2s infinite ease-in-out;
+    }
+}
+
+.navbar-default .navbar-brand {
+    color: white;
+}
+
+.navbar-default .navbar-brand:hover {
+    color: white;
+    -moz-text-shadow:0 0 10px white; 
+    -webkit-text-shadow:0 0 10px white; 
+    text-shadow:0 0 10px white;
+}
+
+nav.navbar-one{
+    background-color: rgba(0,0,0,0.5);
+}
+
+nav.navbar-two{
+    position: fixed;
+    top: 50px;
+    background-color: rgba(0,0,0,0.4);
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+nav.navbar-two ol.breadcrumb{
+    background-color: transparent;
+    border: none;
+    margin: 0px;
+}
+
+table.main{
+    width: 100%;
+}
+
+table.main tr.background{
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 15px;
+    border: none;
+    color: white;
+    height: 35px;
+}
+
+table.main tr.background:hover{
+    transition: 0.3s;
+    background-color: rgba(255,255,255,0.1);
+}
+
+table.main tr.background td{
+    padding: 10px;
+    text-align: left;
+    width: 50%;
+}
+
+
+.form-control, .btn-default {
+    background-color: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+}
+
+.form-control:hover, .btn-default:hover {
+    transition: 0.2s;
+    background-color: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    -moz-text-shadow:0 0 0px white; 
+    -webkit-text-shadow:0 0 0px white; 
+    text-shadow:0 0 0px white;
+}
+
+a.btn-link:hover span.btn-default{
+    background-color: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    -moz-text-shadow:0 0 0px white; 
+    -webkit-text-shadow:0 0 0px white; 
+    text-shadow:0 0 0px white;
+}
+
+.btn-primary {
+    background-color: rgba(0,50,155,0.3);
+    border: none;
+}
+
+.btn-dark {
+    background-color: rgba(255,255,255,0.2);
+    border: none;
+}
+
+.btn-danger {
+    background-color: rgba(155,50,0,0.3);
+    border: none;
+}
+
+a{
+    color: white;
+}
+
+a:hover{
+    color: white;
+    text-decoration: none;
+}
+
+.content {
+    transition: 1s;
+    /*padding-top: 60px;*/
+    color: white;
+}
+
+.m-b-10{
+    margin-bottom: 10px;
+}
+
+.p-b-10{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.content .photo{
+    transition: 0.3s;
+    box-shadow: 0px 0px 69px -4px #000000;
+    background-size: 273px;
+    background-repeat: no-repeat;
+    position: relative;
+    margin: 19px;
+    border: 1px solid black;
+    background-color: rgba(0, 0, 0, 0.9);
+    text-align: center;
+    min-width: 100px;
+    min-height: 180px;
+    width: auto;
+    padding: 0px;
+}
+
+.content .photo[vl="1"]{
+    box-shadow: 0px 0px 69px -4px green;
+    border: 1px solid green;
+}
+
+.content .photo .delete_photo{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -31px;
+    background-color: rgba(155,50,0,0.3);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 5px;
+}
+
+.content .photo .delete_photo:hover{
+    background-color: rgba(155,0,0,0.5);
+}
+
+.content .folder{
+    transition: 0.3s;
+    box-shadow: 0px 0px 69px -4px #000000;
+    background-size: 273px;
+    background-repeat: no-repeat;
+    position: relative;
+    margin: 19px;
+    height: 180px;
+    width: 120px;
+    border: 1px solid black;
+    background-color: rgba(0, 0, 0, 0.9);
+    text-align: center;
+}
+
+#image{
+    transition: 0.3s;
+    box-shadow: 0px 0px 69px -4px #000000;
+    background-size: 273px;
+    background-repeat: no-repeat;
+    position: relative;
+    width: 60%;
+    border: 1px solid black;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.content .photo:hover, .content .folder:hover,{
+    border: 1px solid white;
+}
+
+.content .photo .name, .content .folder .name{
+    background-color: rgba(0, 0, 0, 0.9);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+#content{
+    position: fixed;
+    overflow: auto;
+    top: 86px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+}
+
+#wrapper{
+    z-index: 0;
+}
+
+.page{
+    position: fixed;
+    overflow: auto;
+    top: 86px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    color: white;
+}
+
+h1, h2, h3, h4, h5{
+    color: white;
+}
+
+input[type="text"]:focus,
+input[type="text"]:hover{ 
+    outline: none; 
+    -webkit-tap-highlight-color: transparent; 
+}
+
+.blur{
+    -webkit-filter: blur(10px);
+    filter: blur(10px);
+    filter:progid:DXImageTransform.Microsoft.Blur(PixelRadius='10');
+    -webkit-transition: 1s -webkit-filter linear;
+    transition: 1s filter linear;
+    opacity: 0.7;
+}
+
+.alert-danger{
+
+}
+
+.alert-info{
+    color: #31708f;
+    background-color: rgba(0,0,0,0.2);
+    border: none;
+}
+
+.alert-default{
+    color: white;
+    background-color: rgba(0,0,0,0.2);
+    border: none;
+    border-radius: 0px;
+    padding: 10px;
+}
+
+.alert-warning{
+
+}
+
+.alert-success{
+
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px;
+    z-index: 100;
+    box-shadow: 0px 0px 69px -4px #000000;
+}
