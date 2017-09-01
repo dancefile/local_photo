@@ -48,7 +48,7 @@
     $report = new Report();
 
     //Run the process of generating a file:
-    $report->$cleardb_enable = true;    //Enable clear database mode
+    $report->cleardb_enable = true;    //Enable clear database mode
     $restore->cleardb();                //Clear database now
     $array = $report->restore("filename.db");   //Restore database
 */
