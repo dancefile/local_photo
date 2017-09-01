@@ -1,29 +1,25 @@
 <?php
-/* vim: set expandtab sw=4 ts=4 sts=4: */
 /**
- * Report base creating class
- * Data type: json
- * Separator: \r\n
- * Version of the script: 1.0.7
- * Author: mr.Slink
+ * Класс создания базы отчетов
+ * Тип данных: json
+ * Разделитель: \r\n
+ * Версия скрипта: 1.0.7
+ * Автор: mr.Slink
  *
- * Script description:
- * This script converts MySQL database into Json format
- * and stores it on the server (in the panel). The file is free
- * read without losing speed, and recover data
- * turning the file into a full database with the possibility
- * editing of data (orders).
+ * Описание скрипта:
+ * Этот скрипт преобразует базу данных MySQL в формат Json 
+ * и сохраняет ее на сервере (в панели). Файл можно свободно 
+ * просматривать без потери скорости и восстанавливать данные.
  *
  * @package Report
  */
  /*
-    How to use this:
-
-    //# GENERATE FILE REPORT #
-    //Declare a class:
+    Как это использовать:
+    //# СОЗДАНИЕ ФАЙЛА ОТЧЁТА #
+    //Объявите класс:
     $report = new Report();
 
-    //Specify the parameters:
+    //Укажите параметры:
     include("db.php);
     $report->archive_path        = "./archiv/";
     $report->atc_enable          = false;
@@ -32,41 +28,43 @@
     $report->cleardb_ignore      = ['settings', 'pass']; 
     $report->db_name             = $dbName;
 
-    //Run the process of generating a file:
+    //Запустите процесс создания файла:
     $report->write();
 
-    //# READ FILE REPORT #
-    //Declare a class:
+    //# ЧТЕНИЕ ФАЙЛА ОТЧЁТА #
+    //Объявите класс:
     $report = new Report();
 
-    //Run the process of generating a file:
+    //Запустите процесс чтения файла в массив:
     $array = $report->read("filename.db", "zakaz"); //Where "zakaz" is name of the table
     foreach($array as $i){..}
 
-    //# RESTORE DB TO FILE REPORT #
-    //Declare a class:
+    //# ВОССТАНОВЛЕНИЕ БАЗЫ ИЗ ОТЧЁТА #
+    //Объявите класс:
     $report = new Report();
 
-    //Run the process of generating a file:
-    $report->cleardb_enable = true;    //Enable clear database mode
-    $restore->cleardb();                //Clear database now
-    $array = $report->restore("filename.db");   //Restore database
-*/
+    //Запустите процесс чтения файла:
+    $report->cleardb_enable = true;             //Включите функцию очистки базы
+    $restore->cleardb();                        //Запустите ее
+    $array = $report->restore("filename.db");   //Восстановите базу
+    
+    Чистка - не обязательный процесс, но может вызвать ошибку, если информация в базе присуствует.
+    */
 Class Report{
 
-    Public $archive_path        = "./archiv/";          //Path to the archive folder
-    Public $atc_enable          = true;                 //Automatic thumbnail creation enable
-    Public $encrypt_enable      = false;                //File encryption enable
-    Public $cleardb_enable      = false;                //Clear database enable
-    Public $cleardb_ignore      = ['settings', 'pass']; //Clear database ignore table
-    Public $db_name             = "dancefile";          //Database name
-    Public $table_list;                                 //List of the database table
+    //Параметры по-умолчанию
+    Public $archive_path        = "./archiv/";          //Путь к папке архива
+    Public $atc_enable          = true;                 //Автоматическое создание эскизов
+    Public $encrypt_enable      = false;                //Шифрование файлов
+    Public $cleardb_enable      = false;                //Фкнция очистки базы
+    Public $cleardb_ignore      = ['settings', 'pass']; //Таблицы, которые будут проигнорированы при очистки
+    Public $db_name             = "dancefile";          //Имя текущей базы
 
-    /*========================================================================*/
-    /*                                                                        */
-    /*                            Don't edit this:                            */
-    /*                                                                        */
-    /*========================================================================*/
+    /*
+    * Код:
+    */
+    //Список таблиц текущей базы
+    Public $table_list; 
     
     Public Function __construct(){
          $result = mysql_list_tables($this->db_name);
@@ -78,7 +76,7 @@ Class Report{
     }
     
     /**
-     * Function to clear database
+     * Функция очистки базы данных
      *
      * @return string
      */
@@ -96,10 +94,18 @@ Class Report{
         return false;
     }
 
+    /**
+     * Проверка существования файла
+     *
+     * @return boolean
+     */
     Public Function report_exists($filename){
        return file_exists($this->archive_path.$filename);
     }
 
+    /**
+     * Функция восстановления базы данных
+     */
     public function restore($filename){
         foreach($this->table_list as $table){
             if($table != "thumbnail"){
@@ -114,7 +120,7 @@ Class Report{
     }
 
     /**
-     * Function to get the path to the archive
+     * Получаем путь к архиву
      *
      * @return string
      */
@@ -123,7 +129,7 @@ Class Report{
     }
 
     /**
-     * Function to get the path to the archive
+     * Получаем разрешение на создание эскизов
      *
      * @return boolean
      */
@@ -132,7 +138,7 @@ Class Report{
     }
 
     /**
-     * Function to get the path to the archive
+     * Получаем разрешение на шифрование файлов
      *
      * @return boolean
      */
@@ -141,12 +147,12 @@ Class Report{
     }
 
     /**
-     * Function of reading the database file.
+     * Функция чтения файла отчёта
      *
-     * @param string    $filename   Base file name
-     * @param integer   $part       File reading part
+     * @param string    $filename   Имя файла базы
+     * @param integer   $part       Имя или номер таблицы
      *
-     * @return array    data in an asynchronous array
+     * @return array    данные в асинхронном массиве
      */
     Public Function read($filename, $part){
         if (file_exists($this->path().$filename)){
@@ -167,12 +173,12 @@ Class Report{
     }
 
     /**
-     * Function for reading the settings in the database file.
+     * Функция чтения настроек из файла отчёта (из таблицы Settings)
      *
-     * @param string    $filename   Base file name
-     * @param string    $key        Settings key
+     * @param string    $filename   Имя файла базы
+     * @param string    $key        Ключ
      *
-     * @return string   Value key
+     * @return string   Значение
      */
     Public Function read_setting($filename, $key){
         $JsonSetting = $this->read($filename, "settings");
@@ -185,7 +191,7 @@ Class Report{
     }
 
     /**
-     * Function for reading the creation date file.
+     * Генерация имени файла из текущей даты
      *
      * @param string    $filename   Base file name
      *
@@ -196,11 +202,11 @@ Class Report{
     }
 
     /**
-     * Saving thumbnails of photos
+     * Сохранение эскизов в формате json
      *
      * @param array    $array  mysql_query
      *
-     * @return string
+     * @return string json
      */
     Public Function thumbnail_creation($array){
         $rows = array();$i=0;
@@ -214,9 +220,10 @@ Class Report{
     }
 
     /**
-     * Saving thumbnails of photos
+     * Получение кода эскиза из файла по ID фотографии
      *
-     * @param array    $array  mysql_query
+     * @param string    $filename   Имя файла базы
+     * @param string    $imgname    ID фотографии
      *
      * @return string
      */
@@ -230,7 +237,7 @@ Class Report{
     }
 
     /**
-     * Convert image to base64
+     * Конвертирование изображения в base64
      *
      * @param path    $array  mysql_query
      *
@@ -243,11 +250,11 @@ Class Report{
     }
 
     /**
-     * File Encryption
+     * Шифрование файла
      *
      * @param string    $content
      *
-     * @return string   Encrypted string
+     * @return string   Зашифрованная строка
      */
     Private Function encryption($content){
         if($this->encrypt() == true){
@@ -257,11 +264,11 @@ Class Report{
     }
 
     /**
-     * File Encryption
+     * Дешифрование файла
      *
      * @param string    $content
      *
-     * @return string   Decrypted string
+     * @return string   Дешифрованная строка
      */
     Private Function decryption($content){
         if($this->encrypt() == true){
@@ -271,7 +278,7 @@ Class Report{
     }
 
     /**
-     * Function of recording the database file
+     * Функция записи файла отчёта
      *
      * @return boolean
      */
@@ -288,7 +295,7 @@ Class Report{
     }
 
     /**
-     * Function of converting a sql table into a json format.
+     * Функция конвертирования данных в формат json
      *
      * @param array    $array  mysql_query
      *
