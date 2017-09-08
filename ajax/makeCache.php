@@ -17,9 +17,9 @@ if (@array_key_exists('DateTime', $exif_ifd0))
  } else { $camDate = date ("Y:m:d H:i:s", filemtime($urlde.$line['id']));}
  //echo $camDate;
  if (!is_file(__DIR__.'\..\pm\\'.$line['id'].'.jpg'))
- 	exec('C:\Apache24\htdocs\exe\jpeg_exe4.exe "'.$urlde.$line['id'].'" "'.__DIR__.'\..\pm\\'.$line['id'].'.jpg"',$str);	
+ 	exec('C:\Apache24\htdocs\exe\jpeg_exe4.exe "'.$urlde.'\\'.$line['id'].'" "'.__DIR__.'\..\pm\\'.$line['id'].'.jpg"',$str);	
  
-  if (!is_file(__DIR__.'\..\pm\\'.$line['id'].'.jpg')) {echo 'ererwww';exit;}
+  if (!is_file(__DIR__.'\..\pm\\'.$line['id'].'.jpg')) {echo 'не найдена фото в архиве '.$line['id'].'.jpg';exit;}
   
  	$image = imagecreatefromjpeg(__DIR__.'\..\pm\\'.$line['id'].'.jpg');
 	$max_height=200;

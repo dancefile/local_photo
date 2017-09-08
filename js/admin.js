@@ -129,11 +129,43 @@ success: function(data){
 }});	
 }	
 
-var lastIdMove=0;
-var IdDir='dir0';
-var fotog='';
+
+
+ function report()
+        {
+        	
+            $.ajax({ url: "ajax/report.php",
+                timeout: 60000 }).done(
+                function (result, status) {
+                   result = result.trim();
+$("#dreport").append(status+': '+result+'<br>');
+                    if (result.length >0){
+                    	
+                            
+                      setTimeout(report, 500);
+
+                    };
+                });
+        }
+
 
 $( document ).ready(function() {
+	
+$('#report').click(function(){	
+
+if (confirm('Вы уверены, что хотите закрыть конкурс?')) {$("#dreport").html("");
+report();
+
+};
+});
+var lastIdMove=0;
+var IdDir='dir1';
+var fotog='';	
+	
+	
+	
+	
+	
 $('html').click(function(){
 	$('#move_wrapper').hide();
 });
@@ -203,6 +235,6 @@ winMoveFlash(data,0,0)
   });
 renewflash();
 underflash();
-setTimeout(makeCache,180000);
+setInterval(makeCache,300000);
 
 });

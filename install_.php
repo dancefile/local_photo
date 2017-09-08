@@ -2,14 +2,35 @@
 $hostname = "127.0.0.1";
 $username = "root";
 $password = "1122";
-$dbName = "dancefile";
 $mysqli = new mysqli($hostname, $username, $password);
 if ($mysqli->connect_error) {
     die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
 }
-$mysqli->query('DROP DATABASE `dancefile`');
-$mysqli->query('CREATE DATABASE `dancefile`');
+
+if (!$mysqli->query("DROP DATABASE IF EXISTS `dancefile`;")) {
+        printf("Error: %s\n", $mysqli->error);
+    }
+//if (!$mysqli->query("DROP USER 'dancefile';")) {
+ //       printf("Error: %s\n", $mysqli->error);
+  //  }
+
+if (!$mysqli->query("DROP USER 'dancefile'@'localhost';")) {
+        printf("Error: %s\n", $mysqli->error);
+    }
+if (!$mysqli->query("create database dancefile;")) {
+        printf("Error: %s\n", $mysqli->error);
+    }
 $mysqli->select_db ( 'dancefile' );
+
+if (!$mysqli->query("CREATE USER 'dancefile'@'localhost' IDENTIFIED BY '123';")) {
+        printf("Error: %s\n", $mysqli->error);
+    }
+
+if (!$mysqli->query("GRANT ALL PRIVILEGES ON dancefile. * TO 'dancefile'@'localhost';")) {
+        printf("Error: %s\n", $mysqli->error);
+   }
+
+
 $mysqli->query('CREATE TABLE `baskets` (
   `data` datetime NOT NULL,
   `ip` tinyint(4) NOT NULL,
@@ -92,7 +113,7 @@ $mysqli->query("INSERT INTO `settings` (`kkey`, `value`) VALUES
 ('last_report_date', '2016/11/17'),
 ('last_report_num', '1'),
 ('n', 'DANCE FESTIVAL'),
-('path_to_folder', 'C:\\arhive'),
+('path_to_folder', 'C:'),
 ('price10', '12'),
 ('price15', '17'),
 ('price20', '25'),

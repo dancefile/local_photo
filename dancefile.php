@@ -11,14 +11,14 @@ if ($result = $mysqli->query('SELECT * FROM settings where kkey="iddancefile"'))
 if ($line = mysqli_fetch_array($result)) {$iddancefile=$line['value'];}
 
 $result = $mysqli->query('SELECT * FROM settings where kkey="path_to_folder"');
-if ($line = mysqli_fetch_array($result)) $path_to_folder=$line['value'];
+if ($line = mysqli_fetch_array($result)) $path_to_folder=rtrim(iconv('UTF-8','cp1251',$line['value']), '\\/');
 
 
 
 
 if (isset($_GET['lib'])) {
 
-	$allUrl=array();
+$allUrl=array();
 $query = 'SELECT id,name,parent FROM url ORDER BY `url`.`id` ASC;';
 $rs = $mysqli->query('SELECT id,name,parent FROM url ORDER BY `url`.`id` ASC;');
 while ($line = mysqli_fetch_array($rs)) {
@@ -47,7 +47,8 @@ for ($i=1; $i < key($allUrl)+1; $i++) {
 	if (isset($allUrl[$i])) $str=$allUrl[$i]; else $str=''; 
 fwrite($fp, $str."\r\n");
 };
-fclose($fp);	
+fclose($fp);
+	
 if ($iddancefile && is_file($path_to_folder.'/photo.lib') && is_file($path_to_folder.'/url.lib')) {
   $post_var['id_news']=$iddancefile;
   //$post_var['fotofile']= base64_encode(file_get_contents($path_to_folder.'/photo.lib'));		

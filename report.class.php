@@ -59,7 +59,6 @@ Class Report{
     Public $encrypt_enable      = false;                //Шифрование файлов
     Public $cleardb_enable      = false;                //Фкнция очистки базы
     Public $cleardb_ignore      = ['settings', 'pass']; //Таблицы, которые будут проигнорированы при очистки
-    Public $use_mysqli          = true;                 //Использовать mysqli
     Public $db_name             = "dancefile";          //Имя текущей базы
     /*
     * Код:
@@ -68,17 +67,12 @@ Class Report{
     Public $table_list; 
     
     Public Function __construct(){
-        if($this->use_mysqli == false){
-            $result = mysql_list_tables($this->db_name);
-            while ($table = mysql_fetch_row($result)) {
-                $this->table_list[] = $table[0];
-            }
-        } else {
+global $mysqli;
             $result = mysqli_query($mysqli, "SHOW TABLES");
             while($table = mysqli_fetch_array($result)){
                 $this->table_list[] = $table[0];
             }
-        }
+        
         $this->table_list[] = "thumbnail";
     }
     
@@ -88,16 +82,9 @@ Class Report{
      * @return string
      */
     Public Function cleardb(){
+    	global $mysqli;
         if($this->cleardb_enable == true){
-            if($this->use_mysqli == false){
-                $result = mysql_list_tables($this->db_name);
-                while ($table = mysql_fetch_row($result)) {
-                    if(!in_array($table[0], $this->cleardb_ignore)){
-                        mysql_query("TRUNCATE TABLE ".$table[0]);
-                    }  
-                }
-                return true;
-            } else {
+
                 $result = mysqli_query($mysqli, "SHOW TABLES");
                 while ($table = mysqli_fetch_array($result)) {
                     if(!in_array($table[0], $this->cleardb_ignore)){
@@ -106,7 +93,7 @@ Class Report{
                 }
                 return true;
             }
-        }
+        
         return false;
     }
     /**
@@ -220,21 +207,14 @@ Class Report{
      */
     Public Function thumbnail_creation($array){
         $rows = array();$i=0;
-        if($this->use_mysqli == false){        
-            while($r = mysql_fetch_assoc($array)) {
+
+            while($r = mysqli_fetch_assoc($array)) 
+            {
                 $i++;
                 $rows[$i]['id'] = $r['id'];
-                $rows[$i]['name'] = $r['name'];
-                $rows[$i]['base64'] = $this->to_base64("./ph/".$r['url']."/".$r['name']);
+                $rows[$i]['base64'] = $this->to_base64("./ps/".$r['id'].'.jpg');
             }
-        } else {
-            while($r = mysqli_fetch_assoc($array)) {
-                $i++;
-                $rows[$i]['id'] = $r['id'];
-                $rows[$i]['name'] = $r['name'];
-                $rows[$i]['base64'] = $this->to_base64("./ph/".$r['url']."/".$r['name']);
-            }
-        }
+        
         return json_encode($rows);
     }
     /**
@@ -297,34 +277,21 @@ Class Report{
      * @return boolean
      */
     Public Function write(){
+global $mysqli;
+  ///      require_once "db.php";
 
-        require_once "db.php";
 
-        if($this->use_mysqli == false){
-            $result = mysql_list_tables($this->db_name); 
-        } else {
             $result =  mysqli_query($mysqli, "SHOW TABLES");
-        }
+        
         
         $Content="";
 
-        if($this->use_mysqli == false){
-            while ($table = mysql_fetch_row($result)) {
-                $Content .= $this->to_json(mysql_query("SELECT * from ".$table[0]))."\r\n";
+            while ($table = mysqli_fetch_row($result)) {
+                $Content .= $this->to_json(mysqli_query($mysqli, "SELECT * from ".$table[0]),$table[0])."\r\n";
             };
-        } else {
-            while ($table = mysqlo_fetch_row($result)) {
-                $Content .= $this->to_json(mysqli_query($mysqli, "SELECT * from ".$table[0]))."\r\n";
-            };
-        };
         
-        if($this->atc() == true){
-            if($this->use_mysqli == false){
-                $Content .= $this->thumbnail_creation(mysql_query("SELECT * from foto"));
-            } else {
-                $Content .= $this->thumbnail_creation(mysqli_query($mysqli, "SELECT * from foto"));    
-            };
-        };
+        
+                $Content .= $this->thumbnail_creation(mysqli_query($mysqli, "SELECT * from fotos"));    
         
         
         $FileOpen = fopen($this->path().date("d").rand(1000,9999).date("m").".db","w");
@@ -340,18 +307,15 @@ Class Report{
      *
      * @return string
      */
-    Private Function to_json($array){
+    Private Function to_json($array,$tableName){
+    	
         $rows = array();
+$rows[]=$tableName; 
 
-        if($this->use_mysqli == false){
-            while($r = mysql_fetch_assoc($array)) {
-                $rows[] = $r;
-            }
-        } else {
             while($r = mysqli_fetch_assoc($array)) {
                 $rows[] = $r;
             }
-        }
+        
         return $this->encryption(json_encode($rows));
     }
 }

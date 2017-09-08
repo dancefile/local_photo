@@ -1,11 +1,17 @@
-<?
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>Admin</title>
+ <script src="./js/jquery-1.11.1.min.js"></script>
+ <script src="./js/admin.js"></script>
+ <link rel="stylesheet" type="text/css" href="./css/admin.css"/>
+ </head>
+<body ><?
 
+include ('db.php');
 
-set_time_limit(120);
-include "db.php";
-include('lang.php');
-
-//Очистака архива
+//статистика
 if ($result = $mysqli->query('Select sum(summa) as payedSum from zakaz	where oplata!=0 and del=0'))
 while ($line = mysqli_fetch_array($result)) {
 echo 'Оплачено: '. $line['payedSum'].'<br><br>Фотографы:<br>';
@@ -24,9 +30,11 @@ while ($line3 = mysqli_fetch_array($result3)) {
 }
 
 }
-
-
-
+?><br><br><br>
+<div id='dreport'><button id='report'> Создать отчет и очистить базу данных</button></div>
+</body>
+</html>
+<?
 exit;
 //Очистака архива
 if ($result = $mysqli->query('SELECT * FROM `fotos`'))

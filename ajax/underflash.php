@@ -6,7 +6,7 @@ include('../lang.php');
 	$arr['str']=0;
 		$result = $mysqli->query('SELECT * FROM settings where kkey="path_to_folder"');
 $line = mysqli_fetch_array($result);
-$path_to_folder=$line['value'];
+$path_to_folder=rtrim(iconv('UTF-8','cp1251',$line['value']), '\\/');
 
 function MoveImg($dir)
 { global $IdImg,$EIdImg,$path_to_folder,$fileStr;
@@ -18,7 +18,7 @@ if (is_dir($dir)) {
 if ('.'<>$f & '..'<>$f &  $f<>'trash'&  $f<>'NO') {
 if (is_dir(rtrim($dir,'/\\').'/'.$f)) MoveImg(rtrim($dir,'/\\').'/'.$f); else if (strripos($f,'.jpg')){
 rename ($dir.'/'.$f, $path_to_folder.'/'.$IdImg);
-$fileStr.=$path_to_folder.'/'.$IdImg.'|C:\Apache24\htdocs\ps\\'.$IdImg.'.jpg
+$fileStr.=$path_to_folder.'\\'.$IdImg.'|C:\Apache24\htdocs\ps\\'.$IdImg.'.jpg
 ';	
 $IdImg++;
 if ($IdImg>=$EIdImg) return;
@@ -66,7 +66,6 @@ fwrite($file, $fileStr); //пишем по указателю свои данн�
 fclose($file); 
 shell_exec('C:/Apache24/htdocs/exe/jpeg_exe C:/Apache24/htdocs/tmp/'.$nameTextFile);
 unlink('C:/Apache24/htdocs/tmp/'.$nameTextFile);
-//echo 'exe/jpeg_exe ../tmp/'.$nameTextFile;
 $arr['time']=10;
 } else {
 	$mysqli->query('UPDATE `dancefile`.`flash` SET `toId` = 0 WHERE `flash`.`id` = '.$line['id'].';');
