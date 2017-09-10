@@ -67,7 +67,8 @@
 			$k++;
 		 	echo '
 		 	<div class="photo" id="foto'.$i.'">
-		 		<img class="img" title="'.$_SESSION['name'][$i].'.jpg" src="/ps/'.$_SESSION['name'][$i].'.jpg" hspace="5" vspace="10">
+		 	<span id="vl-img">
+		 		<img class="img" title="'.$_SESSION['name'][$i].'.jpg" src="/ps/'.$_SESSION['name'][$i].'.jpg" hspace="5" vspace="10"></span>
 		 	<div style="text-align:left;">
 		 		<span>'.digital.'</span>
 		 		<input type="checkbox"  id="cd'.$i.'" class="count_foto cd" value="" ';
@@ -102,30 +103,38 @@
 	<?
 		} else {if (isset($echo1)) {echo $echo1;} else {echo '<br><br><div style="text-align:center;font-size:30px;">'.cartempty.'</div>';};};
 	?>
- 	<div class="modalWindow">
- 		<center id="center">
- 			<table height="100%">
- 				<tr>
- 					<td width="100px">
- 						<img src="img/left.png" class="g_but" id="left_b"/>
- 					</td>
- 					<td align="center">
- 						<div class="crop" id="divimg">
- 							<img src="img/nopictures.png" id="img_l"/>
- 							<img src="img/loading.gif" id="img_z"/>
- 							<img src="img/loading.gif" id="img"/>
- 						</div>
- 						<br>
- 						<span id="fancybox-title-over"></span>
- 					</td>
- 					<td width="100px">
- 						<img src="img/right.png" class="g_but" id="right_b"/>
- 					</td>
- 				</tr>
- 			</table>
- 		</center>
- 	</div>
+	<div class="modalWindow">
+		<center id="center">
+			<table height="100%">
+				<tr>
+					<td width="100px">
+						<img src="img/left.png" class="g_but" id="left_b"/>
+					</td>
+					<td align="center">
+						<div class="crop" id="divimg">
+							<img src="img/nopictures.png" id="img_l"/>
+							<img src="img/foto.jpg" id="img"/>
+							<span id="fancybox-title-over"></span>
+						</div>
+						<br>
+						
+					</td>
+					<td width="100px">
+						<img src="img/right.png" class="g_but" id="right_b"/>
+					</td>
+				</tr>
+			</table>
+		</center>
+	</div>
 	<div class="curtain"></div>	
 	<div id="move_wrapper"></div>
+	<script type="text/javascript">
+	var lastclick=-1;
+	var Addphoto='';//'<?=Addphoto; ?>';
+	var ALREADYincart='';//'<?=ALREADYincart; ?>';
+	var deletephoto='';//'<?=deletephoto ?>';
+
+	//console.log('');
+</script>
 </body>
 </html>

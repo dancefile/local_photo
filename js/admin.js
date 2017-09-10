@@ -1,4 +1,10 @@
-                                  function sendMail()
+var lastIdMove=0;
+var IdDir='dir1';
+var fotog='';
+
+
+
+  function sendMail()
         {
         	
 $("#sendMail").html('wait');
@@ -158,9 +164,7 @@ report();
 
 };
 });
-var lastIdMove=0;
-var IdDir='dir1';
-var fotog='';	
+	
 	
 	
 	
