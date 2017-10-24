@@ -71,7 +71,7 @@ define ('back','Назад');//Back
 
 
 define ('pricekor','Кор.&nbspцены');//
-define ('deletephoto','Удалить фото');//Delete this photo
+define ('deletephoto','Убрать из корзины');//Delete this photo
 define ('photos','Количество фото в заказе: ');//photos
 define ('Makeorder',' Оформить заказ ');// Make order 
 define ('Paid','Оплачен');//Paid

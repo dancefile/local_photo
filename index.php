@@ -4,6 +4,9 @@ session_start();
 include "db.php";
 include('lang.php');
 $u='0';
+$shortView=false;
+if (isset($_GET['serach'])){$shortView=TRUE;};
+if (isset($_GET['basket'])){$shortView=TRUE;};
 if (isset($_GET["url"])) $u= $_GET["url"];
 		function array_s($str,$mask) {
 		  foreach ($mask as $item) 
@@ -22,13 +25,24 @@ if (isset($_GET["url"])) $u= $_GET["url"];
 
 	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="./js/jquery.lazy.min.js"></script>
-	<script type="text/javascript" src="./js/gal.js"></script>
+	<script type="text/javascript" src="./js/gal.js?ver=1"></script>
 	<script type="text/javascript">
 var basket=false;
 </script>
-	<link rel="stylesheet" type="text/css" href="./css/gal.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="./css/gal.css?ver=1" media="screen" />
 </head>
-<body>
+<body><? if (isset($_GET['basket'])){ ?>
+		<script type="text/javascript">
+	var basket=true;
+		<? 
+			echo 'var cartempty="'.cartempty.'";';
+			$rs = $mysqli->query('SELECT * FROM settings where kkey="pricecd" or kkey="price10" or kkey="price15" or kkey="price20"  or kkey="curence"') or die( mysql_error());
+			while ($line = mysqli_fetch_array($rs)) {
+				if ($line['kkey']=='curence') {echo 'var '.$line['kkey'].'="'.$line['value'].'";'; define ('curence',$line['value']);} else
+			echo 'var '.$line['kkey'].'='.$line['value'].';'; 	
+			} 
+		?>
+	</script><? } ;?>
 	<div class="header">
 		<div id="fixedBox">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -92,7 +106,7 @@ var basket=false;
 
 								echo $page_str;
 								};};
-								if (!isset($_GET['serach'])){
+								if (!$shortView){
 								?>
 								
 								<span class="style2">Sort by 
@@ -119,7 +133,7 @@ var basket=false;
 					</td><td width="5px"></td><?
 													$count_b=0;
 		if (isset($_SESSION['name'])) {$count_b=count($_SESSION['name']);}
-						 if (!isset($_GET['serach'])){
+						 if (!$shortView){
 
 						if (isset($_SESSION['login'])) {echo '<td width="200px"><div id="appst2"><div><span id="edButon">Редактирование </span> <span class="pages_enable';
 						if (!$page) echo ' edit';
@@ -127,7 +141,24 @@ var basket=false;
 						</div>
 						<div id="editBs"><img src="img/del.gif" id="delfoto"> <img src="img/moveFoto.gif" id="movefoto"> </div>
 						</div></td>';};}
+						 
+						 
+						 
+						 if (isset($_GET['basket'])){
+						 	
+						 						echo '<td>'.total.': <span id="total"></span> '.curence.'<br>'.photos.'<span id="count"></span><br>';
+					if (isset($_SESSION['login'])) {?> <br clear="all"><input id="paid" type="checkbox" checked> <?=Paid?><? 
+					 };
+							echo '</td>';?>
+							<td>
+				<span class="link" id="del"><? echo CleanCart; ?></span>
+				<?
+					if (isset($_SESSION['login'])) {?><br><img src="img/moveFoto.gif" id="movefoto"> переместить <? }; ?> 
+			</td><?
+						 }else {
 						?>
+						
+						
 					
 					<td width="100px">
 						<div id="appst">
@@ -136,13 +167,14 @@ var basket=false;
 							</center>
 						</div>
 					</td>
+					<? } ?>
 				</tr>
 			</table>
 		</div>
 	</div>
 
 	<?
-	if (!isset($_GET['serach'])){
+	if (!$shortView){
 		$query = 'SELECT id,name FROM url where  parent=\''.$u.'\'  and name != "NO" ORDER BY `url`.`name` ASC;';
 		 $rs = $mysqli->query($query) or die('error');
 		while ($line = mysqli_fetch_array($rs)) {
@@ -163,7 +195,6 @@ var basket=false;
 
 }
 
-echo '<span id="vl-img">';
 		if (isset($_GET['serach'])){
 			$i=0;  $mask=array();
 		$search= array(",", ".", "/", "|", "\\", "*");
@@ -185,8 +216,57 @@ echo '<span id="vl-img">';
 				if (isset($_SESSION['name']) && in_array($line['id'],$_SESSION['name'])) {$vl='1';};
 				$cuont++;
 				if ($url!=$line['url']) {$str2='';$url=$line['url'];findperant($url); echo '<br>'.$str2.'<br>';}
-				echo '<img class="lazy img'.$vl.'" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
-			};}} else {
+				echo '<img class="lazy img'.$vl.' vlimg" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
+			};}};
+			
+			
+			if (isset($_GET['basket'])){
+				
+				
+		if (isset($_SESSION['name'])){echo '<span id="basket"><br><span class="link" onClick="cd();" oncontextmenu="nocd(); return false">'.allonCD.'</span><br><br>'; 
+		$k=0;
+		foreach ($_SESSION['name'] as $i => $value) {
+			$k++;
+		 	echo '
+		 	<div class="photo" id="foto'.$i.'">
+		 	
+		 		<img class="img vlimg" title="'.$_SESSION['name'][$i].'.jpg" src="/ps/'.$_SESSION['name'][$i].'.jpg" hspace="5" vspace="10">
+		 	<div class="bas">
+		 		<span>'.digital.'</span>
+		 		<input type="checkbox"  id="cd'.$i.'" class="count_foto cd" value="" ';
+					if ($_SESSION['cd'][$i]) echo 'checked';
+						echo ' onClick="price();">
+				<span id="cd'.$i.'b">
+					<img src="img/load2_emtry.gif"/>
+				</span>
+			</div>
+			<br>
+			<div  class="bas"><span>Print</span></div>
+			A6&nbsp;&nbsp;<a  href=\'javascript:minus("a6'.$i.'");\'><img src="img/minus.jpg" align="top"></a> <input type="text" id="a6'.$i.'" class="count_foto input" size="2" value="'.$_SESSION['a6'][$i].'"> <a  href=\'javascript:plus("a6'.$i.'");\'><img src="img/plus.jpg" align="top"></a> <span id="a6'.$i.'b">&nbsp;<img src="img/load2_emtry.gif"/>&nbsp;</span><br>
+			A5&nbsp;&nbsp;<a  href=\'javascript:minus("a5'.$i.'");\'><img src="img/minus.jpg" align="top"></a> <input type="text" id="a5'.$i.'" class="count_foto input" size="2" value="'.$_SESSION['a5'][$i].'"> <a  href=\'javascript:plus("a5'.$i.'");\'><img src="img/plus.jpg" align="top"></a> <span id="a5'.$i.'b">&nbsp;<img src="img/load2_emtry.gif"/>&nbsp;</span><br>
+			A4&nbsp;&nbsp;<a  href=\'javascript:minus("a4'.$i.'");\'><img src="img/minus.jpg" align="top"></a> <input type="text" id="a4'.$i.'" class="count_foto input" size="2" value="'.$_SESSION['a4'][$i].'"> <a  href=\'javascript:plus("a4'.$i.'");\'><img src="img/plus.jpg" align="top"></a> <span id="a4'.$i.'b">&nbsp;<img src="img/load2_emtry.gif"/>&nbsp;</span><br>
+			<div  class="bas">'.comment.'&nbsp;<input name="comm['.$i.']" type="text" size="8" id="comm'.$i.'" value="'.$_SESSION['comm'][$i].'" class="count_foto i_kom"><span id="comm'.$i.'b">&nbsp;<img src="img/load2_emtry.gif"/>&nbsp;</span></div>';
+		 	echo '<div  class="bas">'.price.'<span style="font-size:20px;" id="price'.$i.'"  class="">0</span></div><br>
+			<span id="del'.$i.'" class="link del">'.deletephoto.'</span></div>';
+		}; 
+
+	?>
+	<br>
+	<br clear="all">
+	<br>
+	<div style="text-align: center;">
+		E-mail: 
+		<input type="text" id="mail" value="<?=$_SESSION['mail']; ?>" class="count_foto i_mail">
+		<span id="mailb">&nbsp;<img src="img/load2_emtry.gif"/>&nbsp;</span>
+		<br><br>
+		<button id="send" class="buttom"><? echo Makeorder; ?></button>
+		<br><br><br>
+	</div>
+	
+	<?} else {if (isset($echo1)) {echo $echo1;} else {echo '<br><br><div style="text-align:center;font-size:30px;">'.cartempty.'</div>';};};
+			
+			}
+			if (!$shortView){
 
 
 
@@ -199,13 +279,14 @@ echo '<span id="vl-img">';
 				$vl='';
 				if (isset($_SESSION['name']) && in_array($line['id'],$_SESSION['name'])) {$vl='1';};
 				$cuont++;
-				echo '<img class="lazy img'.$vl.'" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
+				echo '<img class="lazy img'.$vl.' vlimg" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
 			};
 		
 			}		
-			echo '</span><br><br>';		
+			echo '<br><br>';		
 		if ($page) echo '<br><br>'.$page_str.'<br>';
-		if ($cuont==0) {echo '<br>'.folderempty.'<br>';}; 
+	if ($cuont==0 && !isset($_GET['basket'])) {echo '<br>'.folderempty.'<br>';}; 
+
 
 
 	?>
@@ -241,10 +322,16 @@ echo '<span id="vl-img">';
 <script type="text/javascript">
 	var lastclick=-1;
 	var count_b=<?=$count_b ?>;
+	<? if (isset($_GET['basket'])){?>
+	var Addphoto='';
+	var ALREADYincart='';
+	var deletephoto='';			
+			
+		<? } else{ ?>
 	var Addphoto='<?=Addphoto; ?>';
 	var ALREADYincart='<?=ALREADYincart; ?>';
 	var deletephoto='<?=deletephoto ?>';
-
+		<? }; ?>
 	//console.log('');
 </script>
 

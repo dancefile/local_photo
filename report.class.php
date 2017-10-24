@@ -58,7 +58,7 @@ Class Report{
     Public $atc_enable          = true;                 //Автоматическое создание эскизов
     Public $encrypt_enable      = false;                //Шифрование файлов
     Public $cleardb_enable      = false;                //Фкнция очистки базы
-    Public $cleardb_ignore      = ['settings', 'pass']; //Таблицы, которые будут проигнорированы при очистки
+    Public $cleardb_ignore      = ['pass','settings']; //Таблицы, которые будут проигнорированы при очистки
     Public $db_name             = "dancefile";          //Имя текущей базы
     /*
     * Код:
@@ -87,7 +87,7 @@ global $mysqli;
 
                 $result = mysqli_query($mysqli, "SHOW TABLES");
                 while ($table = mysqli_fetch_array($result)) {
-                    if(!in_array($table[0], $this->cleardb_ignore)){
+                        if(!in_array($table[0], $this->cleardb_ignore)){
                         mysqli_query($mysqli, "TRUNCATE TABLE ".$table[0]);
                     }  
                 }
@@ -108,17 +108,22 @@ global $mysqli;
      * Функция восстановления базы данных
      */
     public function restore($filename){
+    	global $mysqli;
         foreach($this->table_list as $table){
             if($table != "thumbnail"){
                 $tablex = $this->read($filename, $table);
-                foreach($tablex as $key){
+				unset($tablex[0]);
+				//var_dump($tablex); echo '<br><br>';
+				 foreach($tablex as $key){
+				// 	var_dump($key);echo '<br><br><br>';
                     $name = implode("`, `",array_keys($key));
-                    $value = implode("', '",$key);
-                    if($this->use_mysqli == false){
-                        mysql_query("INSERT INTO `".$table."` (`".$name."`) VALUES ('".$value."')");
-                    } else {
-                        mysqli_query($mysqli, "INSERT INTO `".$table."` (`".$name."`) VALUES ('".$value."')");
-                    }
+					$value='';
+					foreach($key as $key2) {
+						
+						if ($key2===null) $value.= 'null,'; else $value.='"'.$key2.'",';;
+					}
+					$value=substr($value, 0,-1);
+                    mysqli_query($mysqli, 'INSERT INTO `'.$table.'` (`'.$name.'`) VALUES ('.$value.')');
                 }
             }
         }
@@ -156,7 +161,7 @@ global $mysqli;
      * @return array    данные в асинхронном массиве
      */
     Public Function read($filename, $part){
-        if (file_exists($this->path().$filename)){
+        if (file_exists($this->path().$filename)){ 
             if(!is_integer($part)){
                 if(in_array($part, $this->table_list)){
                     $part = array_search($part, $this->table_list);
@@ -167,6 +172,11 @@ global $mysqli;
             $FileOpen = fopen($this->path().$filename,"r");
             $FileRead = fread($FileOpen, filesize($this->path().$filename));
             fclose($FileOpen);
+			//if ($part=='9') var_dump(json_decode(explode("\r\n", $FileRead)[$part], true));
+			
+			//if ($part=='9') var_dump(json_decode(explode("\r\n", $FileRead)[$part], true));
+			//exit;
+			//echo $part.' ';
             return $this->decryption(json_decode(explode("\r\n", $FileRead)[$part], true));
         }
         return false;

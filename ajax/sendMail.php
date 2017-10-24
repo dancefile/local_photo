@@ -73,7 +73,7 @@ $post_var=array();
      )
     );
   $context = stream_context_create($options);
-    $result = file_get_contents('http://mail.dancefile.eu/sendmail.php?foto', false, $context);
+    $result = file_get_contents('http://dancefile.ru/sendmail.php?foto', false, $context);
   if ($result==md5_file($path_to_folder.'/'.$line['name'])) {; 
   	$mysqli->query('UPDATE `dancefile`.`foto` SET `sendedmail` = "1" WHERE `foto`.`id` = '.$line['id']);
   	echo 'ADD Order# '.$post_var['id_order'].', foto  '.$post_var['id_foto'].'<br>';
@@ -136,7 +136,7 @@ array(
     )
     );
   $context = stream_context_create($options);
-    $result = file_get_contents('http://mail.dancefile.eu/sendmail.php?foto', false, $context);
+    $result = file_get_contents('http://dancefile.ru/sendmail.php?foto', false, $context);
   echo $result; 
  
   }}}
@@ -157,7 +157,7 @@ array(
     );
   $context = stream_context_create($options);
 
-	$result = file_get_contents('http://mail.dancefile.eu/sendmail.php?mail', false, $context);
+	$result = file_get_contents('http://dancefile.ru/sendmail.php?mail', false, $context);
 	echo $result;
 	$mysqli->query('UPDATE `dancefile`.`zakaz` SET `mailStatus` = "2" WHERE `zakaz`.`id` =  '.$zakazId);	
  	

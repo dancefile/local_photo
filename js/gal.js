@@ -17,6 +17,79 @@ function lang (code)
   });
 }
  
+ function price(){
+var suum=0;
+var	count=0;
+$('.photo').each(function(i,elem) {
+	count++;
+	elemid=$(elem).attr("id").substr(4)
+	sum=0;
+	if ($('#cd'+elemid).prop( "checked" )) sum=pricecd;
+	sum=sum+$('#a6'+elemid).val()*price10;
+	sum=sum+$('#a5'+elemid).val()*price15;
+	sum=sum+$('#a4'+elemid).val()*price20;
+	suum=suum+sum;
+	$('#price'+elemid).html(sum);
+	//alert($(elem).attr("id").substr(4));
+	//if ($(elem).prop("checked")) { $(elem).prop("checked",false); foto_count($(elem));};
+});	
+$('#total').html(suum);
+$('#count').html(count);
+};	
+	
+function nocd(){
+$('.cd').each(function(i,elem) {
+	if ($(elem).prop("checked")) { $(elem).prop("checked",false); foto_count($(elem));};
+});	
+price();
+};
+
+function cd(){
+$('.cd').each(function(i,elem) {
+	if (!$(elem).prop("checked")) { $(elem).prop("checked",true); foto_count($(elem));};
+});	
+price();
+};
+
+function minus(name){
+var a=$( "#"+ name);
+if (a.val()>0) {
+a.val(a.val()-1);
+foto_count(a);
+	price();};
+};
+
+function plus(name){
+var a=$( "#"+ name);
+a.val(a.val()*1+1);
+	foto_count(a);
+	price();
+};
+
+
+
+function foto_count(id) {
+var a=id.attr("id");
+if (id.attr("type")=="checkbox") {
+if (id.prop("checked")) {b=1;} else{b=0;};
+} else {
+var b=id.val();};
+var params = {id:a,val:b};
+
+$.ajax({
+type: "POST",
+url: "ajax/foto_count.php",
+data: params,
+beforeSend: function(){
+document.getElementById(a+"b").innerHTML = "&nbsp;<img src='img/load2.gif'/>&nbsp;";
+
+},
+success: function(data){
+document.getElementById(a+"b").innerHTML = "&nbsp;<img src='img/load2_emtry.gif'/>&nbsp;";
+}});
+}
+
+ 
 function img() {
 //	alert(window.innerHeight+'gg');
 	$('.modalWindow').width( window.innerWidth-2 );
@@ -45,10 +118,11 @@ function add_basket (title) {
 	$('#fancybox-title-over').html(title);
 	$.get('ajax/add_to_basket.php?name='+title).success(function(data) {
 	data = jQuery.parseJSON(data);
-	var e=document.getElementById('vl-img').getElementsByTagName('img');
-	for(var i=0;i<e.length;i++){ 
-		if(e[i].title==title) {lastclick=i;foto=e[i]; break;};
-	}
+	
+	$('.vlimg').each(function(index){if ($( this ).attr("title")==title) {foto=$(this);lastclick=index;return ;};});
+	
+
+	
     if (data.del) {
     	count_b--;
     $(foto).removeClass('img1').addClass('img');
@@ -65,22 +139,20 @@ $('#aa4files').html(count_b);
 }
 
 function creatModalWindow (title) {
-
+var i=0;
 	zoomEnable=false;
 	titlenow=title;
 	$('.modalWindow #img_l').removeClass('zoomout');
- var e=document.getElementById('vl-img').getElementsByTagName('img');
-for(var i=0;i<e.length;i++){ 
-  if(e[i].title==title) {foto=e[i]; break;};
-};
-if (i>0) {var str=e[i-1].title;$('#left_b').attr('title',str);$('#left_b').show();} else {$('#left_b').hide();}
-if (i<e.length-1) {var str=e[i+1].title;$('#right_b').attr('title',str);$('#right_b').show();} else {$('#right_b').hide();}
+	$('.vlimg').each(function(index){if ($( this ).attr("title")==title) {foto=$(this);i=index;return ;};});
+	
+if (i>0) {var str=$('.vlimg').eq(i-1).attr("title");$('#left_b').attr('title',str);$('#left_b').show();} else {$('#left_b').hide();}
+if (i<$('.vlimg').length-1) {var str=$('.vlimg').eq(i+1).attr("title");;$('#right_b').attr('title',str);$('#right_b').show();} else {$('#right_b').hide();}
 $('#fancybox-title-over').attr('title',title);
 if ( $(foto).hasClass("img") ) {
 $('#fancybox-title-over').html(title + ' <a href="javascript: add_basket (\''+title+'\');">'+Addphoto+'</a>');
 	            }  else {
 $('#fancybox-title-over').html(title + ' '+ALREADYincart+' <a href="javascript: add_basket (\''+title+'\'); ">'+deletephoto+'</a>');
-       };
+      };
         
 a = Date.now();
 $('.curtain').show();
@@ -93,7 +165,7 @@ $('.modalWindow #img').attr("src","/pm/"+title);
 }
 //////////////////////////////////////////////
 $(document).ready(function() {
-	
+price();
 	document.body.onkeydown = function(e){
 
 //e = e || window.event;
@@ -108,7 +180,7 @@ $(document).ready(function() {
 	 if ($('#divimg').is(":visible")) if ($('#appst2').is(":visible")){ 
 	 	var title=$('#fancybox-title-over').attr('title');
 	 	$.get('ajax/delfotos.php?ids=d'+title).success(function(data) {
-	 		$("#vl-img img[title='"+title+"']").remove();
+	 		$(".vlimg[title='"+title+"']").remove();
 if ($('#right_b').is(":visible")) {$('#right_b').trigger('click');}
 });}
 	break;
@@ -240,22 +312,22 @@ $('#malevich').on("contextmenu", function() {
 
 });
 
-$('#vl-img img').on("contextmenu", function() {
+$('.vlimg').on("contextmenu", function() {
 if ($('#edButon').hasClass('redB')) {
 	
 	if (lastclick!=-1 && typeof event !=="undefined" && event.shiftKey) {
 	var tt=$(this).attr("title");
 	var now=0;
-$('#vl-img img').each(function(index){
+$('.vlimg').each(function(index){
 	if (tt==$(this).attr("title")) {now=index; //return false;//
 		};
 });	
 
-var flag_add=$('#vl-img img:eq('+lastclick+')').hasClass('redS');
+var flag_add=$('.vlimg:eq('+lastclick+')').hasClass('redS');
 if (now<lastclick) {var vvv=now; now=lastclick; lastclick=vvv};
 if (flag_add) {
-	$('#vl-img img').each(function(index){if (index>=lastclick && index<=now) $(this).addClass('redS');});
-} else {$('#vl-img img').each(function(index){if (index>=lastclick && index<=now) $(this).removeClass('redS');});};
+	$('.vlimg').each(function(index){if (index>=lastclick && index<=now) $(this).addClass('redS');});
+} else {$('.vlimg').each(function(index){if (index>=lastclick && index<=now) $(this).removeClass('redS');});};
 	
 		///////////////////////////////////////////////////////////////////////////////--------------
 	} else {
@@ -263,7 +335,7 @@ $(this).toggleClass('redS', 'addOrRemove');
 }
 
 var tt=$(this).attr("title");
-$('#vl-img img').each(function(index){
+$('.vlimg').each(function(index){
 	if (tt==$(this).attr("title")) {lastclick=index;// return false;
 		};
 });
@@ -274,7 +346,7 @@ if (lastclick!=-1 && typeof event !=="undefined" && event.shiftKey) {
 		
 	var tt=$(this).attr("title");
 	var now=0;
-$('#vl-img img').each(function(index){
+$('.vlimg').each(function(index){
 	if (tt==$(this).attr("title")) {now=index; //return false;//
 		};
 });	
@@ -283,11 +355,11 @@ $('#vl-img img').each(function(index){
 
 var str='';
 var delstr='';
-var flag_add=$('#vl-img img:eq('+lastclick+')').hasClass('img1');
+var flag_add=$('.vlimg:eq('+lastclick+')').hasClass('img1');
 if (now<lastclick) {var vvv=now; now=lastclick; lastclick=vvv};
 if (flag_add) {
-	$('#vl-img img').each(function(index){if (index>=lastclick && index<=now) {$(this).removeClass('img').addClass('img1');str=str+';'+$(this).attr("title");}});
-} else {$('#vl-img img').each(function(index){if (index>=lastclick && index<=now) {$(this).removeClass('img1').addClass('img');delstr=delstr+';'+$(this).attr("title");}});};
+	$('.vlimg').each(function(index){if (index>=lastclick && index<=now) {$(this).removeClass('img').addClass('img1');str=str+';'+$(this).attr("title");}});
+} else {$('.vlimg').each(function(index){if (index>=lastclick && index<=now) {$(this).removeClass('img1').addClass('img');delstr=delstr+';'+$(this).attr("title");}});};
 	
 var params = {basket:str,delbasket:delstr};
 
@@ -362,10 +434,10 @@ location.reload();
 });
 
 $('#appst').click(function(){
- window.location = "/basket.php";
+ window.location = "/?basket";
 });
 
-$('#vl-img img').click(function(){
+$('.vlimg').click(function(){
 creatModalWindow (this.title);
 
 return false;	
@@ -458,6 +530,47 @@ $('#left_b').click(function(event){
 });
 
 
+$('.del').click(function(){
+	
+var code=$(this).attr("id").substr(3);
+
+ $.get('ajax/del_foto_basket.php?del='+code)
+  .success(function() {
+  	$('#foto'+code).remove();
+  	price();
+  });
+
+});	
+
+$('#del').click(function(){
+	
+$.get('ajax/del_foto_basket.php?all=1')
+.success(function() {
+$('.photo').remove();
+$('#basket').html(cartempty);
+});
+});	
+
+$('#send').click(function(){ 
+	$(this).prop('disabled', true);
+	var url='';
+	if ($('#paid').prop('checked')) {url='&paid=1';};
+$.get('ajax/order.php?all=1'+url)
+.success(function(data) {
+$('#basket').html(data);
+});
+	return false;	
+});
+
+
+$('.count_foto').change(function(){
+foto_count($(this));
+price();
+});
+
+$('.i_kom').change(function(){
+foto_count($(this));
+});
 
 
 $("body").on("contextmenu", false);

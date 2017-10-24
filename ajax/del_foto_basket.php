@@ -8,6 +8,7 @@ unset($_SESSION['a5'][$_GET['del']]);
 unset($_SESSION['a4'][$_GET['del']]);
 unset($_SESSION['comm'][$_GET['del']]);
 unset($_SESSION['korprice'][$_GET['del']]);
+if (count ($_SESSION['name'])==0) unset($_SESSION['name']);
 };
 if (isset($_GET['all'])){
 unset($_SESSION['name']);
