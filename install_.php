@@ -84,7 +84,7 @@ $mysqli->query("CREATE TABLE `fotos` (
   `url` int(11) NOT NULL,
   `f` int(11) NOT NULL DEFAULT '0',
   `photografer` int(11) DEFAULT NULL,
-  `data` date DEFAULT NULL,
+  `data` datetime DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
@@ -106,9 +106,7 @@ $mysqli->query("CREATE TABLE `settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='';");
 
 $mysqli->query("INSERT INTO `settings` (`kkey`, `value`) VALUES
-('cdsile', '0'),
 ('curence', 'Руб'),
-('iddancefile', ''),
 ('last_pic', '0'),
 ('last_report_date', '2016/11/17'),
 ('last_report_num', '1'),
@@ -117,6 +115,7 @@ $mysqli->query("INSERT INTO `settings` (`kkey`, `value`) VALUES
 ('price10', '12'),
 ('price15', '17'),
 ('price20', '25'),
+('md5', '".md5(time().gethostname())."'),
 ('pricecd', '10'),
 ('printer', '');");
 

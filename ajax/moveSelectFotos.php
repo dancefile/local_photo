@@ -6,7 +6,7 @@ include('../lang.php');
 	function echolink($id,$name){
 		global $str2,$u;
 		if ($id!=$u) $str2= $str2. '<span class="link0 flash" id="'.$id.'">'.$name.'</span> | ';
-		else {$str2=  $str2.'  '.$name.' | ';};
+		else {$str2=  $str2.'<img src="img/moveFoto.gif" alt="Переместить"  title="Переместить" class="link_i" id="img'.$id.'"/> '.$name.' | ';};
 	}
 
 	function findperant($id){
@@ -31,7 +31,14 @@ if (isset($_POST['add'])) {$mysqli->query('INSERT INTO `url` (`name`, `parent`) 
 echo $echo_menu.$str2.'<span class="link0 flash" id="0">'.mainpage.'</span></div><br><input id="adK'.$u.'" class="inputAddKat" type="text" value="" placeholder="Add"><br>';
  if ($rs = $mysqli->query('SELECT * FROM `url` WHERE `parent` = '.$u)) 
  while ($line = mysqli_fetch_array($rs)) {
- echo '&nbsp;&nbsp;&nbsp;<img src="img/moveFoto.gif" alt="Переместить"  title="Переместить" class="link_i" id="img'.$line['id'].'"/> <span class="link flash" id="'.$line['id'].'">'.$line['name'].'</span><br>';
+ echo '&nbsp;&nbsp;&nbsp;<img src="img/moveFoto.gif" alt="Переместить"  title="Переместить" class="link_i" id="img'.$line['id'].'" vertical-align="baselin"/> <span  vertical-align="baselin" class="link flash" id="'.$line['id'].'">'.$line['name'].'</span> (';
+$res=$mysqli->query('SELECT count(*) FROM `url` WHERE `parent` = '.$line['id']);
+$row=mysqli_fetch_row($res);
+ echo $row[0].'-';
+$res=$mysqli->query('SELECT count(*) FROM fotos where url='.$line['id']);
+$row=mysqli_fetch_row($res);
+echo $row[0].')<br>';
+  
   
  }?>
 

@@ -89,7 +89,7 @@ display: none;
 
 .imLink {
 vertical-align: middle;
-
+cursor: pointer;
 }
 
 html,body {
@@ -258,10 +258,28 @@ margin-right: 3px;
   z-index: 1000;
 }
 
+#photografer-over {
+    font-size: 22px;
+    left: 0;
+    position: absolute;
+    z-index: 1000;
+    text-align: left;
+    bottom: 0;
+}
+
 .style2{
   color: #a0a0a0;
   font-size: 16px;
 }
+
+.style3{
+    font-size: 23px;
+}
+
+.style4{
+    font-size: 33px;
+}
+
 
 .style2 span{
   color:#fff;

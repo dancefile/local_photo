@@ -7,7 +7,38 @@ var b = Date.now();
 var titlenow='';
 var lastId=0;
 
+    if (window.addEventListener) {
+      if ('onwheel' in document) {
+        // IE9+, FF17+
+        window.addEventListener("wheel", onWheel);
+      } else if ('onmousewheel' in document) {
+        // устаревший вариант события
+        window.addEventListener("mousewheel", onWheel);
+      } else {
+        // Firefox < 17
+        window.addEventListener("MozMousePixelScroll", onWheel);
+      }
+    } else { // IE8-
+      window.attachEvent("onmousewheel", onWheel);
+    }
 
+    // Это решение предусматривает поддержку IE8-
+    function onWheel(e) {
+    	if ($('.curtain').is(':visible')) {
+      e = e || window.event;
+
+      // deltaY, detail содержат пиксели
+      // wheelDelta не дает возможность узнать количество пикселей
+      // onwheel || MozMousePixelScroll || onmousewheel
+      var delta = e.deltaY || e.detail || e.wheelDelta;
+      
+     if (delta<0) $('#left_b').trigger('click');
+     if (delta>0)  $('#right_b').trigger('click');
+
+      
+      e.returnValue = false;
+     }
+    }
 
 function lang (code)
 {
@@ -30,8 +61,6 @@ $('.photo').each(function(i,elem) {
 	sum=sum+$('#a4'+elemid).val()*price20;
 	suum=suum+sum;
 	$('#price'+elemid).html(sum);
-	//alert($(elem).attr("id").substr(4));
-	//if ($(elem).prop("checked")) { $(elem).prop("checked",false); foto_count($(elem));};
 });	
 $('#total').html(suum);
 $('#count').html(count);
@@ -91,14 +120,12 @@ document.getElementById(a+"b").innerHTML = "&nbsp;<img src='img/load2_emtry.gif'
 
  
 function img() {
-//	alert(window.innerHeight+'gg');
+
 	$('.modalWindow').width( window.innerWidth-2 );
 	$('.modalWindow').height( window.innerHeight-2 );
 	var w_h = $('.modalWindow').height()-40;
 	var w_w = $('.modalWindow').width()-200;
 
-
-	//if (w_h<im_h || w_w<im_w) {
 
 		var ratioh=im_h/w_h;
 		var ratiow=im_w/w_w;
@@ -109,13 +136,14 @@ function img() {
 	    $('.modalWindow #img').width(Math.round(im_w/ratio));
 	    $('.modalWindow #img_l').height(Math.round(im_h/ratio));
 	    $('.modalWindow #img_l').width(Math.round(im_w/ratio));
-	//}
+
 }
 
 
 function add_basket (title) {
 
 	$('#fancybox-title-over').html(title);
+	$('#photografer-over').html('ups');
 	$.get('ajax/add_to_basket.php?name='+title).success(function(data) {
 	data = jQuery.parseJSON(data);
 	
@@ -148,6 +176,12 @@ var i=0;
 if (i>0) {var str=$('.vlimg').eq(i-1).attr("title");$('#left_b').attr('title',str);$('#left_b').show();} else {$('#left_b').hide();}
 if (i<$('.vlimg').length-1) {var str=$('.vlimg').eq(i+1).attr("title");;$('#right_b').attr('title',str);$('#right_b').show();} else {$('#right_b').hide();}
 $('#fancybox-title-over').attr('title',title);
+
+var attr = fotograf[foto.attr("ph")];
+if ( typeof attr !== 'undefined' && attr !== false) {var str=fotografer+': '+fotograf[foto.attr("ph")]+'.';} else {var str=''};
+var attr = foto.attr("data");
+if ( typeof attr !== 'undefined' && attr !== false) {var str1=foto.attr("data");} else {var str1=''};
+	$('#photografer-over').html(str+' '+str1);
 if ( $(foto).hasClass("img") ) {
 $('#fancybox-title-over').html(title + ' <a href="javascript: add_basket (\''+title+'\');">'+Addphoto+'</a>');
 	            }  else {
@@ -168,14 +202,8 @@ $(document).ready(function() {
 price();
 	document.body.onkeydown = function(e){
 
-//e = e || window.event;
 
-//alert(e.keyCode);
 	switch(e.keyCode) {
-//	case 17://ctrl
-//if ($('#appst2').is(":visible")){ $('#edButon').trigger('click');};
-
-//break;
 	case 46://del
 	 if ($('#divimg').is(":visible")) if ($('#appst2').is(":visible")){ 
 	 	var title=$('#fancybox-title-over').attr('title');
@@ -212,15 +240,13 @@ break;
 
 }
 
-$('body').keyup(function(e) {
+window.onscroll = function() {
+ // var scrolled = window.pageYOffset || document.documentElement.scrollTop;
+ // alert('scrolled');
+  //document.getElementById('showScroll').innerHTML = scrolled + 'px';
+return false;
+}
 
-
-
-});
-
-
-
-	
 	
 	$('.curtain').click(function(){
 	$("#move_wrapper").hide();
@@ -254,18 +280,12 @@ type: "POST",
 url: "ajax/moveSelPhotos.php",
 data: params,
 success: function(data){
-	//alert (data);
 if (basket) {location.reload();};
 $('img.redS').remove();
 	$("#move_wrapper").hide();
 	$('.curtain').hide();
 }
 });
-//$.get('ajax/moveSelPhotos.php?ids='+s+'&to='+to).success(function(data) {
-	//alert (data);
-//});
-
-
 }
 });		
 	
@@ -289,7 +309,7 @@ $('img.redS').each(function( ) {s=s+','+ $( this ).attr("title")});
 if (s!='') {
 $('img.redS').remove();
 $.get('ajax/delfotos.php?ids='+s).success(function(data) {
-	//alert (data);
+
 });}
 });	
 
@@ -313,6 +333,9 @@ $('#malevich').on("contextmenu", function() {
 });
 
 $('.vlimg').on("contextmenu", function() {
+	
+//if (window.var !== undefined) { ... }
+if (basket) {return;};	
 if ($('#edButon').hasClass('redB')) {
 	
 	if (lastclick!=-1 && typeof event !=="undefined" && event.shiftKey) {
@@ -458,6 +481,7 @@ img();
 $('.modalWindow #img_l').mouseout(function() {
 if (zoomEnable) {
   $('#fancybox-title-over').show();
+  $('#photografer-over').show();
   var offset = $('.modalWindow #divimg').offset();
    $('.modalWindow #img').offset(offset)
    .height(Math.round(im_h/ratio))
@@ -467,6 +491,7 @@ if (zoomEnable) {
 $('.modalWindow #img_l').click(function(){ // Что будет происходить по клику по ссылке
 	if (zoomEnable) {zoomEnable=false;
 		  $('#fancybox-title-over').show();
+		  $('#photografer-over').show();
   var offset = $('.modalWindow #divimg').offset();
    $('.modalWindow #img').offset(offset)
    .height(Math.round(im_h/ratio))
@@ -478,7 +503,9 @@ $('.modalWindow #img_l').click(function(){ // Что будет происход
 		$('.modalWindow #img').height(im_h)
 		
 	    .width(im_w);
-$('#fancybox-title-over').hide();}
+$('#fancybox-title-over').hide();
+$('#photografer-over').hide();
+}
 
 
 	return false;	
@@ -486,7 +513,9 @@ $('#fancybox-title-over').hide();}
     		
   		
 $('.modalWindow #img_l').mouseenter(function(){
-	if (zoomEnable) {$('#fancybox-title-over').hide(); 		    $('.modalWindow #img').height(im_h);
+	if (zoomEnable) {$('#fancybox-title-over').hide(); 	
+	    $('#photografer-over').hide();
+	    $('.modalWindow #img').height(im_h);
 	    $('.modalWindow #img').width(im_w);	}
 });
 

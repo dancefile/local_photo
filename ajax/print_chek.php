@@ -17,7 +17,8 @@ $price[$line['kkey']]=$line['value'];
 
 $rs = $mysqli->query('SELECT * FROM zakaz where id='.$_GET['order']) or die( mysql_error());
 while ($line = mysqli_fetch_array($rs)) {
-$totalprice=$line['summa']; 	
+$totalprice=$line['summa'];
+$email=$line['mail'];
 }
 
 
@@ -33,12 +34,20 @@ add_str_to_im(brendname,40);
 add_str_to_im(url,26);
 add_str_to_im(date("F j, Y, H:i:s"),20);
 $y=$y+10;
-add_str_to_im('Order #',20);
+
+add_str_to_im(order,20);
 add_str_to_im($_GET['order'],100);
 $y=$y+10;
-add_str_to_im('Your price',20);
+add_str_to_im(Your_price,20);
 add_str_to_im($totalprice.' '.$price['curence'],80);
-add_str_to_im('Thank you!',40);
+if ($email) {$y=$y+10;
+	add_str_to_im(use_,20);
+	add_str_to_im($email,18);
+	add_str_to_im(to_download_your_fotos_at,20);
+	add_str_to_im('dancefile.'.$domen.'/mail',25);
+}
+
+add_str_to_im(Thank_you,40);
 
 $y=$y+70;
 add_str_to_im('.',10);

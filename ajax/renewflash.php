@@ -5,10 +5,12 @@ function SearchImg($dir)
 { global $imgCount;
 if (is_dir($dir)) if ($dh=opendir($dir))
 {while ($f=readdir($dh)) {
+	if ($imgCount>4999) break;
 if ('.'<>$f & '..'<>$f &  $f<>'trash'&  $f<>'NO') {
 if (is_dir(rtrim($dir,'/\\').'/'.$f)) SearchImg(rtrim($dir,'/\\').'/'.$f); else if (strripos($f,'.jpg')){
 	//echo $f.'<br>';
 $imgCount++;
+
 }}}}}
 
 if ($rs = $mysqli->query('SELECT * FROM `flash` ORDER BY `flash`.`url` ASC'))
@@ -16,7 +18,7 @@ if ($rs = $mysqli->query('SELECT * FROM `flash` ORDER BY `flash`.`url` ASC'))
 $imgCount=0;
 echo '<br><div>'.$line['url'].fotos; 		
 SearchImg($line['url']);
-echo $imgCount;
+echo '<span id="fotos'.$line['id'].'">'.$imgCount.'</span>';
 //if ($line['time']) {
 //$timeFlash = strtotime($line['time']);
 //$timeFlash=time()-$timeFlash; 

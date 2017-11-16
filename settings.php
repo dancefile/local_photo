@@ -2,7 +2,49 @@
 session_start();
 if(!$_SESSION['auth']) {header("Location: ./admin_auth.php");die();}
 include ('db.php');
-include('lang.php');
+//include('lang.php');
+include('class/multilanguage.php');
+$langarray['admin']=array('Админ','Admin');
+$langarray['download']=array('Загрузки','Download');
+$langarray['photographers']=array('Фотографы','Photographers');
+$langarray['passwords']=array('Пароли','Passwords');
+$langarray['other']=array('Прочее','Other');
+$langarray['new_path_to_the_memory_card']=array('Новый путь к карте памяти','New path to the memory card');
+$langarray['Upload']=array('Добавить','Upload');
+$langarray['the_path']=array('Путь','Path');
+$langarray['New_code_for_the_photographer']=array('Новый код фографа','New code for the photographer');
+$langarray['New_user_password']=array('Новый пароль пользователя','New user password');
+$langarray['Edit']=array('Изменить','Edit');
+$langarray['Upload']=array('Добавить','Upload');
+$langarray['New_name_of_photographer']=array('Новое имя фотографа','New name of photographer');
+$langarray['Save']=array('Сохранить','Save');
+$langarray['login']=array('Логин','login');
+$langarray['New_user_login']=array('Логин нового пользователя','New user login');
+$langarray['Code']=array('Код','Code');
+$langarray['delete']=array('Удалить','Delete');
+$langarray['name']=array('Имя','Name');
+$langarray['cdsile']=array('Скидка','Sale');
+$langarray['curence']=array('Валюта','Currency');
+$langarray['iddancefile']=array('id конкурса на сайте','id of the contest on the site');
+$langarray['n']=array('Название турнира','Name of the tournament');
+$langarray['path_to_folder']=array('Путь к архиву','The path to the archive');
+$langarray['price10']=array('Цена печати 10х15','The price of printing is 10x15');
+$langarray['price15']=array('Цена печати 15х20','The price of printing is 15x20');
+$langarray['price20']=array('Цена печати 20х30','The price of printing is 20x30');
+$langarray['pricecd']=array('Цена файла','Price of file');
+$langarray['printer']=array('Чековый принтер','Receipt printer');
+$langarray['New_user_created_successfully']=array('Новый пользователь успешно создан','New user created successfully');
+$langarray['Add_user']=array('Добавить пользователя','Add user');
+$langarray['Hashtag']=array('Хэштег:','Hashtag:');
+$langarray['']=array('','');
+$langarray['']=array('','');
+$langarray['']=array('','');
+$langarray['']=array('','');
+$langarray['']=array('','');
+
+
+$newlanguage= new Multilanguage($langarray);
+
 if(isset($_POST['deleteuser'])) {
 DelUser($_POST['id']);
 header("Location: /settings.php?a=admin");
@@ -91,49 +133,50 @@ body {
   font-family:Corbel,'Myriad Pro',Arial, Helvetica, sans-serif;
 }
 </style>
-	<a href="/admin.php">Admin</a><br><br><br><br> 
+	<a href="/admin.php"><?=$newlanguage->admin?></a><br><br><br><br> 
 	<?
 	function SelectBd($kkey)
-{global $mysqli;
+{global $mysqli,$newlanguage;
  if ($stmt=$mysqli->query("SELECT * FROM settings WHERE kkey='$kkey'"))
  while ($row = mysqli_fetch_array($stmt)) {
- echo "<form action='' method='POST'>$kkey<input type='hidden' value='".$row['kkey']."' name='kkey'/><input type='text' value='".$row['value']."' name='value'/><input type='submit' name='save' value='Сохранить'/></form>";
+ echo "<form action='' method='POST'>$kkey<input type='hidden' value='".$row['kkey']."' name='kkey'/><input type='text' value='".$row['value']."' name='value'/><input type='submit' name='save' value='$newlanguage->Save'/></form>";
 }}
 
 
 	function Selectfotografers($id)
-{global $mysqli;
+{global $mysqli,$newlanguage;
  if ($stmt=$mysqli->query("SELECT * FROM `fotografers` WHERE id='$id'"))
  while ($row = mysqli_fetch_array($stmt)) {
- echo "<form action='' method='POST'><input type='text' name='kod' value='".$row['kod'] ."'/><input type='text' name='name' value='".$row['name'] ."'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='savefotograf' value='Сохранить'/></form>";
+ echo "<form action='' method='POST'><input type='text' name='kod' value='".$row['kod'] ."'/><input type='text' name='name' value='".$row['name'] ."'/><input type='hidden' value='".$row['id']."' name='id'/>
+ <input type='submit' name='savefotograf' value='$newlanguage->Save'/></form>";
 }}
 	
 	function SelectFlash($id)
-{global $mysqli;
+{global $mysqli,$newlanguage;
  if ($stmt=$mysqli->query("SELECT * FROM `flash` WHERE id='$id'"))
  while ($row = mysqli_fetch_array($stmt)) {
- echo "<form action='' method='POST'><input type='text' name='url' value='".$row['url'] ."'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='saveurl' value='Сохранить'/></form>";
+ echo "<form action='' method='POST'><input type='text' name='url' value='".$row['url'] ."'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='saveurl' value='$newlanguage->Save'/></form>";
 }}
 
 	function SelectPass($id)
-{global $mysqli;
+{global $mysqli,$newlanguage;
  if ($stmt=$mysqli->query("SELECT * FROM pass WHERE id='$id'"))
  while ($row = mysqli_fetch_array($stmt)) {
- echo "<form action='' method='POST'><input type='text' name='login' value='".$row['login'] ."'/><input type='password' value='".$row['pas']."' name='pass'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='savepass' value='Сохранить'/></form>";
+ echo "<form action='' method='POST'><input type='text' name='.$newlanguage->login.' value='".$row['login'] ."'/><input type='password' value='".$row['pas']."' name='pass'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='savepass' value='$newlanguage->Save'/></form>";
 }}
 	function SaveBd($kkey, $value) {
-		global $mysqli;
+		global $mysqli,$newlanguage;
 		$mysqli->query("UPDATE settings SET value='".$mysqli->real_escape_string($value)."' WHERE kkey = '$kkey'");
 	}
 	function SavePass($login, $pas, $id) {
-		global $mysqli;
+		global $mysqli,$newlanguage;
 		$mysqli->query("UPDATE pass SET login='".$mysqli->real_escape_string($login)."', pas='".$mysqli->real_escape_string($pas)."' WHERE id = '$id'");
 	}
 		function SaveUser($newlogin, $newpass) {
-		global $mysqli;
+		global $mysqli,$newlanguage;
 		$sql = "INSERT INTO pass (login,pas) VALUES('$newlogin','$newpass')";
 		if ($mysqli->query($sql) === TRUE) {
-    echo "Новый пользователь успешно создан";
+    echo $newlanguage->New_user_created_successfully;
 }
 }
 			function DelUser($id) {
@@ -142,48 +185,48 @@ body {
 	}
 	}
 	function DeleteUser($id)
-{global $mysqli;
+{global $mysqli,$newlanguage;
  if ($stmt=$mysqli->query("SELECT * FROM pass WHERE id='$id'"))
  while ($row = mysqli_fetch_array($stmt)) {
- echo "<form action='' method='POST'><input type='text' name='login' value='".$row['login'] ."' disabled='disabled'/><input type='password' value='".$row['pas']."' name='pass' disabled='disabled'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='deleteuser' value='Удалить'/></form>";
+ echo "<form action='' method='POST'><input type='text' name='login' value='".$row['login'] ."' disabled='disabled'/><input type='password' value='".$row['pas']."' name='pass' disabled='disabled'/><input type='hidden' value='".$row['id']."' name='id'/><input type='submit' name='deleteuser' value='$newlanguage->delete'/></form>";
 }}
 switch ($_GET['a']) {
 	case 'admin':
-	echo "<form method='POST'><input type='text' name='newlogin' placeholder='Логин нового пользователя'><input type='text' name='newpass' placeholder='Пароль нового пользователя'><input type='submit' name='createuser' value='Добавить пользователя'/></form>";
+	echo "<form method='POST'><input type='text' name='newlogin' placeholder='$newlanguage->New_user_login'><input type='text' name='newpass' placeholder='$newlanguage->New_user_password'><input type='submit' name='createuser' value='$newlanguage->Add_user'/></form>";
 if ($result = $mysqli->query('SELECT * FROM `pass`'))
-	echo "<table><tr><th>login</th><th></th><th></th></tr>";
+	echo "<table><tr><th>$newlanguage->login</th><th></th><th></th></tr>";
 while ($line = mysqli_fetch_array($result)) {
-	echo "<tr><td>".$line['login']."</td><td><a href='settings.php?a=r&id=".$line['id']."'/>Изменить</a></td><td><a href='settings.php?a=y&id=".$line['id']."'/>Удалить</a></td></tr><br>";
+	echo "<tr><td>".$line['login']."</td><td><a href='settings.php?a=r&id=".$line['id']."'/>$newlanguage->Edit</a></td><td><a href='settings.php?a=y&id=".$line['id']."'/>$newlanguage->delete</a></td></tr><br>";
 };
  ?>	
 	
 <?		break;
 	case 'other':
-echo "<table><tr><th>kkey</th><th>value</th><th></th></tr>";
+echo "<table><tr><th></th><th></th><th></th></tr>";
 if ($stmt=$mysqli->query("SELECT * FROM settings WHERE kkey not in ('last_report_date','last_pic','last_report_num')"))
  while ($row = mysqli_fetch_array($stmt)) {
-			echo "<tr><td>".$row['kkey']."</td><td>".$row['value']."</td><td><a href='settings.php?a=e&kkey=".$row['kkey']."'/>Изменить</a></td></tr></form>";
+			if ($row['kkey']!='md5' && $row['kkey']!='cdsile') echo "<tr><td>".$newlanguage->__get($row['kkey'])."</td><td>".$row['value']."</td><td><a href='settings.php?a=e&kkey=".$row['kkey']."'/>$newlanguage->Edit</a></td></tr></form>";
 }
 echo "</table>";
 
 		break;
 	case 'flash':
-	echo "<form method='POST'><input type='text' name='newpath' placeholder='Новый путь для скачки'><input type='submit' name='createpath' value='Добавить'/></form>";
+	echo "<form method='POST'><input type='text' name='newpath' placeholder=$newlanguage->new_path_to_the_memory_card><input type='submit' name='createpath' value=$newlanguage->Upload></form>";
 if ($result = $mysqli->query('SELECT * FROM `flash`'))
-	echo "<table><tr><th>Путь</th><th></th></tr>";
+	echo "<table><tr><th>$newlanguage->the_path</th><th></th></tr>";
 while ($line = mysqli_fetch_array($result)) {
-	echo "<tr><td>".$line['url']."</td><td><a href='settings.php?a=s&id=".$line['id']."'/>Изменить</a></td><td><a href='settings.php?delflash&id=".$line['id']."'/>Удалить</a></td></tr><br>";
+	echo "<tr><td>".$line['url']."</td><td><a href='settings.php?a=s&id=".$line['id']."'/>$newlanguage->Edit</a></td><td><a href='settings.php?delflash&id=".$line['id']."'/>$newlanguage->delete</a></td></tr><br>";
 };
 echo "</table>"; 			
 		
 		
 		break;
 	case 'fotograf':
-	echo "<form method='POST'><input type='text' name='newfotografkod' placeholder='Новый код фографа'> <input type='text' name='newfotografname' placeholder='Новое имя фотографа'><input type='submit' name='createfotograf' value='Добавить'/></form>";
+	echo "<form method='POST'><input type='text' name='newfotografkod' placeholder='$newlanguage->New_code_for_the_photographer'> <input type='text' name='newfotografname' placeholder='$newlanguage->New_name_of_photographer'><input type='submit' name='createfotograf' value='$newlanguage->Upload'/></form>";
 if ($result = $mysqli->query('SELECT * FROM `fotografers`'))
-	echo "<table><tr><th>Код</th><th>имя</th><th></th></tr>";
+	echo "<table><tr><th>$newlanguage->Code</th><th>$newlanguage->name</th><th></th></tr>";
 while ($line = mysqli_fetch_array($result)) {
-	echo "<tr><td>".$line['kod']."</td><td>".$line['name']."</td><td><a href='settings.php?a=f&id=".$line['id']."'/>Изменить</a></td><td><a href='settings.php?delfotograf&id=".$line['id']."'/>Удалить</a></td></tr><br>";
+	echo "<tr><td>".$line['kod']."</td><td>".$line['name']."</td><td><a href='settings.php?a=f&id=".$line['id']."'/>$newlanguage->Edit</a></td><td><a href='settings.php?delfotograf&id=".$line['id']."'/>$newlanguage->delete</a></td></tr><br>";
 };
 echo "</table>"; 			
 		
@@ -208,11 +251,15 @@ echo "</table>";
 
 	  
 	default: 
+		
+	 if ($stmt=$mysqli->query('SELECT * FROM settings WHERE kkey="md5"'))
+ while ($row = mysqli_fetch_array($stmt)) {
+ echo $newlanguage->Hashtag.' '.$row['value'].'<br><br>';}	
 	?>
-<a href="/settings.php?a=flash">Скачка</a><br><br>
-<a href="/settings.php?a=fotograf">Фотографы</a><br><br>	
-<a href="/settings.php?a=admin">Пароли</a><br><br>
-<a href="/settings.php?a=other">Прочие</a><br><br>	
+<a href="/settings.php?a=flash"><?=$newlanguage->download?></a><br><br>
+<a href="/settings.php?a=fotograf"><?=$newlanguage->photographers?></a><br><br>	
+<a href="/settings.php?a=admin"><?=$newlanguage->passwords?></a><br><br>
+<a href="/settings.php?a=other"><?=$newlanguage->other?></a><br><br>	
 		
 		
 <?		break;

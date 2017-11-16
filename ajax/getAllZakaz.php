@@ -5,11 +5,18 @@ if(!$_SESSION['auth'])
     header("Location: ./admin_auth.php");
     die();
 }
-?>
 
-
-<?php
 include_once "../db.php";
+include('../class/multilanguage.php');
+$langarray['NO']=array('нет','no');
+$langarray['Сash']=array('Наличные','Сash');
+$langarray['Transfer']=array('Перевод','Transfer');
+$langarray['Other']=array('Прочие','Other');
+$langarray['yes']=array('да','yes');
+$langarray['no']=array('нет','no');
+$newlanguage= new Multilanguage($langarray);
+
+
 $downloadedPhoto = array();
 if ($rs = $mysqli->query('select * from down_photo'))
     while ($line = mysqli_fetch_array($rs))
@@ -34,16 +41,15 @@ while ($line = mysqli_fetch_array($rs)) {
         $A[strval($key)] = $val;
     }
 	switch ($A['oplata']) {
-		case '0':$A['oplata']='NO';	break;
-		case '1':$A['oplata']='Сash';break;
-		case '2':$A['oplata']='Transfer';break;
-		case '3':$A['oplata']='Other';break;
+		case '0':$A['oplata']=$newlanguage->NO;	break;
+		case '1':$A['oplata']=$newlanguage->Сash;break;
+		case '2':$A['oplata']=$newlanguage->Transfer;break;
+		case '3':$A['oplata']=$newlanguage->Other;break;
 			}
 	
-	if ($A['ok']) {$A['ok']='Yes';} else {$A['ok']='No';};
+	if ($A['ok']) {$A['ok']=$newlanguage->yes;} else {$A['ok']=$newlanguage->NO;};
 
     $arr[$i++] = $A;
 }
 
 echo json_encode($arr);
-?>

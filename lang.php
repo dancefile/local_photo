@@ -38,16 +38,13 @@ $_SESSION['lang']=$lang;
 };
 
 			
-define ('brendname','DanceFile.eu');
-define ('url','info@dancefile.eu');
+define ('brendname','DanceFile.'.$domen);
+define ('url','info@dancefile.'.$domen);
 define ('mainpage','DanceFile');
-
-//define ('brendname','DanceFile.ru');
-//define ('url','info@dancefile.ru');
-//define ('mainpage','DanceFile');
 
 switch ($lang) {
 case "ru":
+define ('fotografer','Фотограф');
 define ('fotos',' фотографий:');	
 define ('moving',' перемещаются...');
 define ('move','переместить');
@@ -59,16 +56,11 @@ define ('comment','Ком.');//
 define ('price','Стоимость: ');//
 define ('digital','Файл (CD,e-mail...)');//
 
-
-
-//
-
 define ('orderready','Спасибо! Ваш заказ сохранен.');//Please ask our manager for assistance.
 define ('ordernamber','Номер Вашего заказа: ');//'Your Order # '
 define ('total','Сумма');//Total
 define ('page','Страницы');//Main page
 define ('back','Назад');//Back
-
 
 define ('pricekor','Кор.&nbspцены');//
 define ('deletephoto','Убрать из корзины');//Delete this photo
@@ -83,9 +75,25 @@ define ('Go','Искать');//Go
 define ('folderempty','В этой папке еще нет фото :(');//This folder is empty
 define ('photoaddedcart','Фотография добавлена в корзину');//This photo is added to your cart
 define ('Thanks','Спасибо!');
+
+define ('order','Заказ №');
+define ('Your_price','Цена');
+
+define ('use_','Используйте');
+define ('to_download_your_fotos_at','чтобы загрузить свои фото на');
+define ('Thank_you','Спасибо!');
+
+define ('next_page','следующая страница');
+
+//Используйте info@dancefile.ru, чтобы загрузить свои фото на dancefile.eu/mail
+
+//Use info@dancefile.ru to download your fotos at dancefile.eu/mail
+
+
 break ;
  
 case "de":
+define ('fotografer','Fotograf');
 define ('price','Стоимость: ');//
 define ('orderready','Vielen Dank! Ihre Bestellung ist erfasst.');
 define ('ordernamber','Ihre Auftragsnummer: ');
@@ -110,12 +118,18 @@ define ('photoaddedcart','Foto in Warenkorb gelegt');
 define ('ALREADYincart','Dieses Foto ist bereits im Warenkorb');
 define ('Addphoto','Foto in Warenkorb legen');
 define ('Thanks','Vielen Dank!');
-define ('digital','Digitální (CD, e-mail ...)');//
+define ('digital','Digitální (CD, e-mail ...)');
+define ('order','Bestell-Nr.');
+define ('Your_price','Preis');
+define ('Thank_you','Vielen Dank!');
+define ('next_page','Nächste Seite');
+
 break ;
 
 
 case "zh":
-define ('price','Стоимость: ');//
+define ('fotografer','攝影師');
+define ('price','成本: ');//
 define ('orderready','请向我们的经理寻求帮助');	 
 define ('ordernamber','你的订单 ＃ ');
 define ('total','总');
@@ -139,11 +153,16 @@ define ('ALREADYincart','这张照片已经在你的车');
 define ('Addphoto','将此照片添加到购物车');
 define ('page','页');//Main page
 define ('Thanks','谢谢');
-define ('digital','數字（CD 電子郵件...）');//
+define ('digital','數字（CD 電子郵件...）');
+define ('order','订单号');
+define ('Your_price','價格');
+define ('Thank_you','謝謝');
+define ('next_page','下一頁');
 break ;
 
 case "cs":
-define ('price','Стоимость: ');//
+define ('fotografer','Fotograf');
+define ('price','Náklady: ');//
 define ('orderready','Děkujeme! Vaše objednávka byla přijata ke zpracování');
 define ('ordernamber','č. vaší objednávky: ');
 define ('total','K zaplacení');
@@ -168,10 +187,15 @@ define ('ALREADYincart','Fotografie je již v nákupním koši');
 define ('Addphoto','Přidat do nákupního koše');
 define ('Thanks','Děkujeme!');	
 define ('digital','Digitální (CD,e-mail...)');//
+define ('order','Objednací číslo');
+define ('Your_price','Cena');
+define ('Thank_you','Děkuji!');
+define ('next_page','Na další stránce');
 break ;
 
 default:
-define ('price','Стоимость: ');//
+define ('fotografer','Photographer');
+define ('price','Price: ');//
 define ('orderready','Thank you very much!'); 
 define ('ordernamber','Your Order # ');
 define ('total','Total');
@@ -196,6 +220,12 @@ define ('Addphoto','Add this photo to the cart');
 define ('page','Page');//Main page
 define ('Thanks','Thanks!');
 define ('digital','Digital (CD,e-mail...)');//
+define ('order','Order No.');
+define ('Your_price','Your price');
+define ('use_','Use');
+define ('to_download_your_fotos_at','to download your fotos at');
+define ('Thank_you','Thank you!');
+define ('next_page','Next page');
 
 };
 ?>

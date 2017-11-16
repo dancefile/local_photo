@@ -1,3 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine On
-RewriteRule ^(.*)$ /?p=$1 [R=301,L]

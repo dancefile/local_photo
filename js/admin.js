@@ -17,7 +17,7 @@ $("#sendMail").html('wait');
                             $("#sendMail").html(status+'<br>'+result);
                        setTimeout(sendMail, 500);
 
-                    } else { $("#sendMail").html(status+'<br><button onclick="sendMail()">Send mail</button>');}
+                    } else { $("#sendMail").html(status+'<br><button onclick="sendMail()">'+Sendmail+'</button>');}
                 });
         }
        
@@ -37,7 +37,7 @@ $("#sendMail").html('wait');
                             $("#makeCache").html(result);
                        setTimeout(makeCache, 100);
 
-                    } else { $("#makeCache").html(status+'<br><button onclick="makeCache()">Make Cache</button>');}
+                    } else { $("#makeCache").html(status+'<br><button onclick="makeCache()">'+MakeCache+'</button>');}
                 });
         }}
        
@@ -67,7 +67,7 @@ $("#sendMail").html('wait');
                                 "<td>" + (operation.ok || "") + "</td>" +
                                 "<td>" + (operation.data || "") + "</td>" +
                                 "<td>" + (operation.menedger || "") + "</td>" +
-                                "<td><button onclick='deleteZakaz("+operation.id+")'>"+(showDeleted==1?"Recover":"Delete")+"</a><br>"
+                                "<td><button onclick='deleteZakaz("+operation.id+")'>"+(showDeleted==1?Recover:Delete)+"</a><br>"
                                 + "</td>" +
 
                                 "</tr>");
@@ -99,17 +99,19 @@ function renewflash(){ //вывод информации по флешкам
 function underflash(){ //
  $.get("ajax/underflash.php")
   .success(function(data) {
-  	var time=20000;
+  	var time=600000;
   	//alert(data);
   	data = data.trim();
     if (data.length >0){
     	data = jQuery.parseJSON(data);
     if (data.time) {time=data.time;};
-  if (data.str!== undefined) { $("#under").html(data.str);
+   // alert (data.str);
+  if (data.str!== undefined) { var fotos=$("#fotos"+data.flashid).html()-data.str; $("#fotos"+data.flashid).html(fotos);
   if (data.str==-1) renewflash();
   } else {$("#under").html("Ошибка выполнения");};
    
     }
+    //alert (time);
     setTimeout(underflash,time);
   	
   	})
@@ -139,27 +141,28 @@ success: function(data){
 
  function report()
         {
-        	
+        flag = true;	
             $.ajax({ url: "ajax/report.php",
                 timeout: 60000 }).done(
                 function (result, status) {
                    result = result.trim();
-$("#dreport").append(status+': '+result+'<br>');
+$("#dreport").append(result+'<br>');
                     if (result.length >0){
                     	
                             
-                      setTimeout(report, 500);
+                      setTimeout(report, 100);
 
-                    };
+                    } else {flag = false;};
                 });
         }
 
 
 $( document ).ready(function() {
-	
+
+
 $('#report').click(function(){	
 
-if (confirm('Вы уверены, что хотите закрыть конкурс?')) {$("#dreport").html("");
+if (confirm('Вы уверены, что хотите закрыть конкурс?')) {$("#dreport").html("Ждите<br>");
 report();
 
 };
@@ -205,7 +208,6 @@ type: "POST",
 url: "ajax/StartMoveFotos.php",
 data: params,
 success: function(data){
-//	alert (data);
 underflash();
 }});	
 	

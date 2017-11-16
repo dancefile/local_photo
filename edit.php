@@ -6,7 +6,39 @@ if(!$_SESSION['auth'])
     die();
 }
 include ("db.php");
-include 'lang.php';
+include('class/multilanguage.php');
+$langarray['close']=array('Закрыть окно','Close');
+$langarray['Enter_new_id_zakaza']=array('Введите номер заказа','Enter new id zakaza');
+$langarray['Show_not_deleted']=array('Показывать не удаленные','Show not deleted');
+$langarray['Show_Deleted']=array('Показать удаленные','Show Deleted');
+$langarray['sum']=array('Сумма','Total');
+$langarray['payment']=array('Оплата','Paid');
+$langarray['ready']=array('Готов','Ready');
+$langarray['Download_files']=array('Скачать файлы для CD','Download files');
+$langarray['Print_receipt']=array('Печать чека','Print receipt');
+$langarray['to_mail']=array('На почту','to mail');
+$langarray['Uploading_to_the_server']=array('Готов к загрузке на сервер','Uploading to the server');
+$langarray['Sent']=array('Отправлен','Sent');
+$langarray['Сash']=array('Наличные','Сash');
+$langarray['Transfer']=array('Перевод','Transfer');
+$langarray['Other']=array('Прочие','Other');
+$langarray['Download_All']=array('Скачать все','Download_All');
+$langarray['Move_all_photo_to_other_zakaz']=array('Переместить фотографии в другой заказ','Move all photo to other zakaz');
+$langarray['Add_to_my_Basktet']=array('Скопировать фото в корзину этого компьютера','Add to my Basktet');
+$langarray['Korprice']=array('Корректировка цены','Price adjustment');
+$langarray['Coment']=array('Коментарий','Coment');
+$langarray['Price']=array('Цена','Price');
+$langarray['Download']=array('Загрузить','Download');
+$langarray['Recover']=array('Востановить','Recover');
+$langarray['Delete']=array('Удалить','Delete');
+$langarray['Move_photo']=array('Переместить фото в другой заказ','Move photo');
+$langarray['Zakaz']=array('Заказ № ','Order # ');
+$langarray['']=array('','');
+$langarray['']=array('','');
+$langarray['']=array('','');
+$langarray['']=array('','');
+$newlanguage= new Multilanguage($langarray);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -24,6 +56,21 @@ include 'lang.php';
             }else
                 echo 0;
         ?>;
+        
+        
+$( document ).ready(function() {
+	
+	$('#mail').change(function(){
+		var params = {id:zakazId,mail:$('#mail').val()};
+		$.ajax({
+		type: "POST",
+		url: "ajax/updateZakaz.php",
+		data: params
+		});
+	});
+});       
+        
+        
             function addToMyBasket(id){
         $.get("ajax/addOrderToMyBasket.php?bid="+id);
     } 
@@ -80,21 +127,24 @@ $.get( "ajax/toMail.php", { mail: mail,id:id} )
         }
         
         function moveAllPhoto(){
-            var retVal = prompt("Enter new id zakaza : ");
+            var retVal = prompt("<?=$Multilanguage->Enter_new_id_zakaza?> : ");
             if(retVal==null){
                 return;
-            }
+            };
+          //  alert(retVal);
+            //return false;
             var newZakazId = parseInt(retVal);
-            $.get( "moveAllPhoto.php", {oldZakazID: zakazId,
+            $.get( "ajax/moveAllPhoto.php", {oldZakazID: zakazId,
                 newZakazID:newZakazId } )
                 .done(function( data ) {
+                	//alert(data);
                     if(data.indexOf("error")!=-1)
                         alert("error!");
                     else {
                         
-                        if(ZakazId!=zakazId)
-                            deleteRow(id);
-                    }
+                       
+                            window.close();}
+                    
                 });
         }
         function saveZakaz()
@@ -125,7 +175,7 @@ $.get( "ajax/toMail.php", { mail: mail,id:id} )
             var ZakazId_n = parseInt(retVal);
             if(ZakazId_n!=zakazId) {
            // alert(zakazId);
-            $.get( "movePhoto.php", {pid: id,zid:zakazId,zidn:ZakazId_n} )
+            $.get( "ajax/movePhoto.php", {pid: id,zid:zakazId,zidn:ZakazId_n} )
                 .done(function( data ) {
                // alert (data);
                     if(data.indexOf("error")!=-1)
@@ -148,7 +198,7 @@ $.get( "ajax/toMail.php", { mail: mail,id:id} )
                 recover = 1;
             }
            
-            $.get( "deletePhoto.php", { photoId: id,recover:recover,zid: zakazId } )
+            $.get( "ajax/deletePhoto.php", { photoId: id,recover:recover,zid: zakazId } )
                 .done(function( data ) {
 
                     if(data.indexOf("error")!=-1)
@@ -183,27 +233,27 @@ $.get( "ajax/toMail.php", { mail: mail,id:id} )
 </head>
 <body>
 	<h3>
-<input type="button" value="Закрыть окно" onClick="window.close();">
+<input type="button" value="<?=$newlanguage->close?>" onClick="window.close();">
 </h3><br>
-<h1 align="center">Zakaz #: <?php echo $_GET['id']?></h1>
+<h1 align="center"><? echo $newlanguage->Zakaz.' '.$_GET['id']?></h1>
 <h3>
     <?php
     $id = $_GET['id'];
     if(isset($_GET['showDeleted'])){
-        echo "<a href='./edit.php?id=$id'>Show not deleted</a>";
+        echo "<a href='./edit.php?id=$id'>$newlanguage->Show_not_deleted</a>";
     }else
-        echo "<a href='./edit.php?id=$id&showDeleted'>Show Deleted</a>";
+        echo "<a href='./edit.php?id=$id&showDeleted'>$newlanguage->Show_Deleted</a>";
 
     ?>
 </h3><br>
 <h2>
     <table  align="center" border="3">
         <tr align="center">
-            <th>Main Operations</th>
-            <th>Ready</th>
-            <th>Payment</th>
-            <th>Total</th>
-            <th>Other Operations</th>
+            <th></th>
+            <th><?=$newlanguage->ready?></th>
+            <th><?=$newlanguage->payment?></th>
+            <th><?=$newlanguage->sum?></th>
+            <th></th>
 
         </tr>
         <tbody>
@@ -216,17 +266,17 @@ if ($line = mysqli_fetch_array($result))
                 <td>
                     
                     <a href="zip.php?zid=<?php echo $_GET['id'];?>&command=cd"
-                       download="<?php echo $_GET['id'];?>"> Download files</a><br><br>
-                       <button onclick="print_chek(<?php echo $_GET['id'];?>)">Print receipt</button>
+                       download="<?php echo $_GET['id'];?>"><?=$newlanguage->Download_files?></a><br><br>
+                       <button onclick="print_chek(<?php echo $_GET['id'];?>)"><?=$newlanguage->Print_receipt?></button>
                   <br><br>
                    <div id="mailStatus">
                    	<?
                    	switch ($line['mailStatus']) {
-						   case '1':  echo 'Uploading to the server';  break;
-						   case '2':  echo 'Sent';  break;
+						   case '1':  echo $newlanguage->Uploading_to_the_server;  break;
+						   case '2':  echo $newlanguage->Sent;  break;
 					   }
                    	echo '<br><input type="text"  id="mail" size="40" placeholder="e-mail" value="'.$line['mail'].'"><br>';
-                    echo' <button onclick="tomail()">to mail</button>';
+                    echo' <button onclick="tomail()">'.$newlanguage->to_mail.'</button>';
 					if ($line['mailStatus']==1) 
                    	?>
                    </div>
@@ -237,18 +287,18 @@ if ($line['ok']) echo 'checked';
 echo ' class="checkbox">'; ?>
                 </td>
                 <td id="tcpayd">
-<? echo '<input type="checkbox" id="cpayd1" '; if ($line['oplata']==1) echo 'checked';echo ' class="checkbox paycheck">Сash<br>'; ?>
-<? echo '<input type="checkbox" id="cpayd2" '; if ($line['oplata']==2) echo 'checked';echo ' class="checkbox paycheck">Transfer<br>'; ?>
-<? echo '<input type="checkbox" id="cpayd3" '; if ($line['oplata']==3) echo 'checked';echo ' class="checkbox paycheck">Other<br>'; ?>
+<? echo '<input type="checkbox" id="cpayd1" '; if ($line['oplata']==1) echo 'checked';echo ' class="checkbox paycheck">'.$newlanguage->Сash.'<br>'; ?>
+<? echo '<input type="checkbox" id="cpayd2" '; if ($line['oplata']==2) echo 'checked';echo ' class="checkbox paycheck">'.$newlanguage->Transfer.'<br>'; ?>
+<? echo '<input type="checkbox" id="cpayd3" '; if ($line['oplata']==3) echo 'checked';echo ' class="checkbox paycheck">'.$newlanguage->Other.'<br>'; ?>
                 </td>
                   <td id="total">
 <? echo $line['summa'];?>
                 </td>
 <td>
 <a href="zip.php?zid=<?php echo $_GET['id'];?>&command=all"
-                       download="<?php echo $_GET['id'];?>"> Download All</a><br><br>
-                        <a href="./admin.php" onclick="moveAllPhoto()">All photo to other zakaz</a><br><br>
-                       <button onclick='addToMyBasket(<?php echo $_GET['id'];?>)'>Add to my Basktet</button>
+                       download="<?php echo $_GET['id'];?>"><?=$newlanguage->Download_All?></a><br><br>
+                        <button onclick='moveAllPhoto()'><?=$newlanguage->Move_all_photo_to_other_zakaz?></button><br><br>
+                       <button onclick='addToMyBasket(<?php echo $_GET['id'];?>)'><?=$newlanguage->Add_to_my_Basktet?></button>
 </td>
             </tr>
             
@@ -261,12 +311,12 @@ echo ' class="checkbox">'; ?>
 
     <table id="tbl1" align="center" border="3">
         <tr align="center">
-            <th>Photo</th>
             <th> </th>
-            <th>Korprice</th>
-            <th>Coment</th>
-            <th>Price</th>
-            <th>Operations</th>
+            <th> </th>
+            <th><?=$newlanguage->Korprice?></th>
+            <th><?=$newlanguage->Coment?></th>
+            <th><?=$newlanguage->Price?></th>
+            <th></th>
         </tr>
                     <?
 if(isset($_GET['showDeleted'])) $deleted=1; else $deleted=0;
@@ -303,10 +353,10 @@ echo ' onchange="recalc('.$line['id'].')" onkeydown="recalc('.$line['id'].')" va
 <td><p id="price_'.$line['id'].'">'.$line['price'].'</p></td>
 <td><a id="a_'.$line['id'].'" href="downloadPhoto.php?photoId='.$line['id'].'" style="color:';
 if(isset($a[$line['id']])) echo "orange"; else echo "blue";
-echo '" onclick="changeColor('.$line['id'].')">Download</a><br><br><br>
+echo '" onclick="changeColor('.$line['id'].')">'.$newlanguage->Download.'</a><br><br><br>
 <button onclick="deletePhoto('.$line['id'].')">';
-if ($line['del']) echo "Recover"; else echo "Delete";
-echo '</button><br><button onclick="copyPhoto('.$line['id'].')">Move photo</button>
+if ($line['del']) echo $newlanguage->Recover; else echo $newlanguage->Delete;
+echo '</button><br><button onclick="copyPhoto('.$line['id'].')">'.$newlanguage->Move_photo.'</button>
 </td></tr>';
             
             }
@@ -316,7 +366,7 @@ echo '</button><br><button onclick="copyPhoto('.$line['id'].')">Move photo</butt
     </table>
 </h2>
 
-    <input type="button" value="Закрыть окно" onClick="window.close();">
+    <input type="button" value="<?=$newlanguage->close ?>" onClick="window.close();">
 <br><br>
 </body>
  <script type="text/javascript">

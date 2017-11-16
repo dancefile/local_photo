@@ -25,15 +25,22 @@ if (isset($_GET["url"])) $u= $_GET["url"];
 
 	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="./js/jquery.lazy.min.js"></script>
-	<script type="text/javascript" src="./js/gal.js?ver=1"></script>
+	<script type="text/javascript" src="./js/gal.js?ver=2"></script>
 	<script type="text/javascript">
 var basket=false;
+var fotograf=[];
+<?
+					$rs = $mysqli->query('SELECT * FROM fotografers') or die( mysql_error());
+			while ($line = mysqli_fetch_array($rs)) {
+			echo 'fotograf['.$line['id'].']="'.$line['name'].'";'; 	
+			} 
+			?>
 </script>
 	<link rel="stylesheet" type="text/css" href="./css/gal.css?ver=1" media="screen" />
 </head>
-<body><? if (isset($_GET['basket'])){ ?>
+<body onscroll="return false"><? if (isset($_GET['basket'])){ ?>
 		<script type="text/javascript">
-	var basket=true;
+		basket=true;
 		<? 
 			echo 'var cartempty="'.cartempty.'";';
 			$rs = $mysqli->query('SELECT * FROM settings where kkey="pricecd" or kkey="price10" or kkey="price15" or kkey="price20"  or kkey="curence"') or die( mysql_error());
@@ -41,6 +48,9 @@ var basket=false;
 				if ($line['kkey']=='curence') {echo 'var '.$line['kkey'].'="'.$line['value'].'";'; define ('curence',$line['value']);} else
 			echo 'var '.$line['kkey'].'='.$line['value'].';'; 	
 			} 
+			
+	
+			
 		?>
 	</script><? } ;?>
 	<div class="header">
@@ -86,7 +96,7 @@ var basket=false;
 								if (isset($_SESSION['page']) && $_SESSION['page']) {$page = 0;} else {
 								if (isset($_GET['page']))
 								$page = ($_GET['page']); else $page = 1;
-								$rows_per_page = 2000;
+								$rows_per_page = 1500;
 								$from = ($page-1) * $rows_per_page;
 								$res=$mysqli->query("SELECT count(*) FROM fotos where url='$id_url'");
 								$row=mysqli_fetch_row($res);
@@ -95,7 +105,7 @@ var basket=false;
 								$page_str='';
 								if ($total_rows > $rows_per_page) {
 									
-								 $page_str.= '<span class="style2">'.page.': ';
+								 $page_str.= '<span class="style3">'.page.': ';
 								for($i = 1; $i <= $total_pages; $i++) {
 								  if (($i) == $page) {
 								    $page_str.= "" . $i . " ";
@@ -181,7 +191,7 @@ var basket=false;
 		echo '<a href="?url='.$line["id"].'" class="link1">'.$line["name"].'</a>';
 		if (isset($_SESSION['login'])) { echo '&nbsp;&nbsp;&nbsp;
 		<input id="inp'.$line["id"].'" class="inputLink" type="text" value="'.$line["name"].'"/>&nbsp;&nbsp;&nbsp;<img src="img/edit.jpg" id="edt'.$line["id"].'" class="imLink"/>&nbsp;&nbsp;&nbsp;
-		<img src="img/cut.jpg"  id="cut'.$line["id"].'" class="imLink"/>&nbsp;&nbsp;&nbsp;<img src="img/del.jpg"  id="del'.$line["id"].'" class="imLink"/> ';};
+		<img src="img/cut_.jpg"  id="cut'.$line["id"].'" class="imLink"/>&nbsp;&nbsp;&nbsp;<img src="img/del.jpg"  id="del'.$line["id"].'" class="imLink"/> ';};
 		echo '<br>';
 		$cuont++;
 		}
@@ -189,7 +199,7 @@ var basket=false;
 		if(isset($_SESSION['cutkat']) && $_SESSION['cutkat']) {
 			$str2='';
 		findperant($_SESSION['cutkat']);
-		echo '<img src="img/cut.jpg"  id="pas'.$u.'" class="imLink"/>'.$str2.'<spane id="cle'.$u.'" class="imLink"> сбросить</spane><br><br>';};
+		echo $str2.'<spane id="pas'.$u.'" class="imLink"/> вставить </spane>'.'<spane id="cle'.$u.'" class="imLink"> сбросить</spane><br><br>';};
 		echo '<input id="adK'.$u.'" class="inputAddKat" type="text" value="'.$line["name"].'" placeholder="Add"/><br>';
 		}
 
@@ -199,14 +209,12 @@ var basket=false;
 			$i=0;  $mask=array();
 		$search= array(",", ".", "/", "|", "\\", "*");
 		$mask= explode(" ", preg_replace('/[\s]{2,}/', ' ', str_replace ($search , ' ' , $_GET['serach'])));
-		//foreach ($searh_m as  $value) if (strlen ($value)>3) $mask[]=$value;
-		//$mask = array("0123x","0124x","1235x","1245x","1235x","1267x","1765x","1275x");
 		$sql='';
 		if (count ($mask)>0) {
 
 		foreach ($mask as $key => $value) 
 		$sql.= ','.$value;
-		$sql = 'SELECT id,url FROM fotos where id in ('.substr($sql,1) .') order by id;';
+		$sql = 'SELECT id,url,photografer,data FROM fotos where id in ('.substr($sql,1) .') order by id;';
 		$rs = $mysqli->query($sql);
 		$ldn=-1;
 		$lurl='-';
@@ -216,12 +224,14 @@ var basket=false;
 				if (isset($_SESSION['name']) && in_array($line['id'],$_SESSION['name'])) {$vl='1';};
 				$cuont++;
 				if ($url!=$line['url']) {$str2='';$url=$line['url'];findperant($url); echo '<br>'.$str2.'<br>';}
-				echo '<img class="lazy img'.$vl.' vlimg" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
+				echo '<img ph="'.$line['photografer'].'" data="'.$line['data'].'" class="lazy img'.$vl.' vlimg" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
 			};}};
 			
 			
 			if (isset($_GET['basket'])){
-				
+				if (isset($_SERVER['HTTP_REFERER'])) echo '<div><a href="'.$_SERVER['HTTP_REFERER'].'">'.back.'</a></div>';
+
+
 				
 		if (isset($_SESSION['name'])){echo '<span id="basket"><br><span class="link" onClick="cd();" oncontextmenu="nocd(); return false">'.allonCD.'</span><br><br>'; 
 		$k=0;
@@ -271,7 +281,7 @@ var basket=false;
 
 
 
-		$sql = 'SELECT id FROM fotos where url='.$id_url.' order by '.$sort;
+		$sql = 'SELECT id,photografer,data FROM fotos where url='.$id_url.' order by '.$sort;
 		if ($page) $sql .= ' LIMIT '.$from.', '.$rows_per_page.';';
 		 $rs2 = $mysqli->query($sql) or die( mysql_error());
 		 
@@ -279,12 +289,17 @@ var basket=false;
 				$vl='';
 				if (isset($_SESSION['name']) && in_array($line['id'],$_SESSION['name'])) {$vl='1';};
 				$cuont++;
-				echo '<img class="lazy img'.$vl.' vlimg" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
+				echo '<img ph="'.$line['photografer'].'" data="'.$line['data'].'" class="lazy img'.$vl.' vlimg" title="'.$line['id'].'.jpg" data-src="/ps/'.$line['id'].'.jpg" src="img/foto.jpg">';
 			};
 		
 			}		
-			echo '<br><br>';		
-		if ($page) echo '<br><br>'.$page_str.'<br>';
+			echo '<br><br>';	
+			
+			//	
+		
+		
+		if ($page) {if ($page<$total_pages) {$curent_page=$page+1; echo '<br><center><br><a href="?url='.urlencode($u).'&page=' .$curent_page. '" class="style4">>>> '.next_page.' >>></a><br></center>';}
+			echo '<br>'.$page_str.'<br>';}
 	if ($cuont==0 && !isset($_GET['basket'])) {echo '<br>'.folderempty.'<br>';}; 
 
 
@@ -304,6 +319,7 @@ var basket=false;
 							<img src="img/nopictures.png" id="img_l"/>
 							<img src="img/foto.jpg" id="img"/>
 							<span id="fancybox-title-over"></span>
+							<span id="photografer-over"></span>
 						</div>
 						<br>
 						
@@ -331,8 +347,9 @@ var basket=false;
 	var Addphoto='<?=Addphoto; ?>';
 	var ALREADYincart='<?=ALREADYincart; ?>';
 	var deletephoto='<?=deletephoto ?>';
+
 		<? }; ?>
-	//console.log('');
+			var fotografer='<?=fotografer ?>';
 </script>
 
 </html>

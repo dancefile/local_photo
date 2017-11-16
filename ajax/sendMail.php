@@ -8,9 +8,12 @@ include('../lang.php');
 //	$ftp_server = '43.252.178.2';
 //$ftp_user_name = 'artandan';
 //$ftp_user_pass = '61E4Jwyz7a';
-$iddancefile=0;
-if ($result = $mysqli->query('SELECT * FROM settings where kkey="iddancefile"'))
-if ($line = mysqli_fetch_array($result)) {$iddancefile=$line['value'];}
+$md5=0;
+if ($result = $mysqli->query('SELECT * FROM settings where kkey="md5"'))
+if ($line = mysqli_fetch_array($result)) {$md5=$line['value'];}
+$name='-';
+if ($result = $mysqli->query('SELECT * FROM settings where kkey="n"'))
+if ($line = mysqli_fetch_array($result)) {$name=$line['value'];}
 
 $result = $mysqli->query('SELECT * FROM settings where kkey="path_to_folder"');
 if ($line = mysqli_fetch_array($result)) $path_to_folder=$line['value'];
@@ -57,7 +60,7 @@ if ($line = mysqli_fetch_array($result)) $path_to_folder=$line['value'];
 	
        	
 $post_var=array();
- $post_var['id_news']=$iddancefile;
+ $post_var['md5']=$md5;
 
   $post_var['id_order']=$zakazId;
 
@@ -107,12 +110,12 @@ $post_var=array();
    
    	
 	
-		$file_folder = $path_to_folder.'/'; // папка с файлами
-		 $dir=$file_folder.'cd/';
-if (is_dir($dir)) {
-    if ($dh = opendir($dir)) {
-        while (($file = readdir($dh)) !== false) {
-if( $file == '.' || $file == '..' || is_dir($dir.$file)) continue;
+		//$file_folder = $path_to_folder.'/'; // папка с файлами
+		// $dir=$file_folder.'cd/';
+//if (is_dir($dir)) {
+ //   if ($dh = opendir($dir)) {
+  //      while (($file = readdir($dh)) !== false) {
+//if( $file == '.' || $file == '..' || is_dir($dir.$file)) continue;
 //$upload = ftp_put($conn_id, "public_html/mail/$iddancefile/$zakazId/".$file, $dir.$file, FTP_BINARY);
 // проверяем статус загрузки
 //if (!$upload) {
@@ -121,31 +124,32 @@ if( $file == '.' || $file == '..' || is_dir($dir.$file)) continue;
     //   echo "Good: Uploaded ".$file.'<br>';
   // }			
 			
-$post_var=array();
-$post_var['id_news']=$iddancefile;
-$post_var['id_order']=$zakazId;
-$post_var['id_foto']=$file;
-$post_var['foto_file']= base64_encode(file_get_contents($dir.$file));			
-$post = http_build_query($post_var);
-$options = array('http' =>
-array(
-'method'  => 'POST',
-'header'  => 'Content-type: application/x-www-form-urlencoded
- User-Agent: Mozilla/3.9',
-'content' => $post
-    )
-    );
-  $context = stream_context_create($options);
-    $result = file_get_contents('http://dancefile.ru/sendmail.php?foto', false, $context);
-  echo $result; 
+//$post_var=array();
+//$post_var['md5']=$md5;
+//$post_var['id_order']=$zakazId;
+//$post_var['id_foto']=$file;
+//$post_var['foto_file']= base64_encode(file_get_contents($dir.$file));			
+//$post = http_build_query($post_var);
+//$options = array('http' =>
+//array(
+//'method'  => 'POST',
+//'header'  => 'Content-type: application/x-www-form-urlencoded
+// User-Agent: Mozilla/3.9',
+//'content' => $post
+ //   )
+ //   );
+ // $context = stream_context_create($options);
+ //   $result = file_get_contents('http://dancefile.ru/sendmail.php?foto', false, $context);
+ // echo $result; 
  
-  }}}
+ // }///}//}
 //ftp_close($conn_id);
 
 $post_var=array();
-$post_var['id_news']=$iddancefile;
+$post_var['md5']=$md5;
 $post_var['id_order']=$zakazId;
 $post_var['mail']=$mail;
+$post_var['name']=$name;
 $post = http_build_query($post_var);
 $options = array('http' =>
 array(
@@ -163,5 +167,3 @@ array(
  	
 	   };  };
 	 
-
-?>

@@ -29,7 +29,13 @@ findperant($u);
 echo $echo_menu.$str2.'<span class="link flash" id="0">'.mainpage.'</span></div><br>';
  if ($rs = $mysqli->query('SELECT * FROM `url` WHERE `parent` = '.$u)) 
  while ($line = mysqli_fetch_array($rs)) {
- echo '&nbsp;&nbsp;&nbsp;<img src="img/m_i.png" alt="Переместить"  title="Переместить" class="link_i" id="img'.$line['id'].'"/> <span class="link flash" id="'.$line['id'].'">'.$line['name'].'</span><br>';
+ echo '&nbsp;&nbsp;&nbsp;<img src="img/m_i.png" alt="Переместить"  title="Переместить" class="link_i" id="img'.$line['id'].'"/> <span class="link flash" id="'.$line['id'].'">'.$line['name'].'</span> (';
+$res=$mysqli->query('SELECT count(*) FROM `url` WHERE `parent` = '.$line['id']);
+$row=mysqli_fetch_row($res);
+ echo $row[0].'-';
+$res=$mysqli->query('SELECT count(*) FROM fotos where url='.$line['id']);
+$row=mysqli_fetch_row($res);
+echo $row[0].')<br>';
   
  }
   ?>
@@ -43,7 +49,7 @@ echo $echo_menu.$str2.'<span class="link flash" id="0">'.mainpage.'</span></div>
 	while ($line2 = mysqli_fetch_array($rs2))	{
 		$select='';
 		if ($_POST['fotog']==$line2['kod']) {$select=" selected";$addfotograf=FALSE;}
-	echo '<option value="'.$line2['id'].'"'.$select.'>'.$line2['kod'].' | '.$line2['name'].'</option>';
+	echo '<option value="'.$line2['id'].'"'.$select.'>'.$line2['kod'].'</option>';
 	}
 	if ($addfotograf) {
 	$rs3 = $mysqli->query('INSERT INTO `fotografers` (`id`, `kod`, `name`) VALUES (NULL, "'.$_POST['fotog'].'", "'.$_POST['fotog'].'");') or die( mysqli_error());	

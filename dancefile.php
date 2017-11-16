@@ -3,18 +3,15 @@ ini_set('upload_max_filesize', '60M');
 ini_set('max_execution_time', '150');
 ini_set('memory_limit', '128M');
 ini_set('post_max_size', '60M');
-$server=9;//5 
 include ('db.php');
- $start = microtime(true);
- $action=false;
-if ($result = $mysqli->query('SELECT * FROM settings where kkey="iddancefile"'))
-if ($line = mysqli_fetch_array($result)) {$iddancefile=$line['value'];}
+$start = microtime(true);
+$action=false;
+$md5='no';
+if ($result = $mysqli->query('SELECT * FROM settings where kkey="md5"'))
+if ($line = mysqli_fetch_array($result)) {$md5=$line['value'];}
 
 $result = $mysqli->query('SELECT * FROM settings where kkey="path_to_folder"');
 if ($line = mysqli_fetch_array($result)) $path_to_folder=rtrim(iconv('UTF-8','cp1251',$line['value']), '\\/');
-
-
-
 
 if (isset($_GET['lib'])) {
 
@@ -49,10 +46,8 @@ fwrite($fp, $str."\r\n");
 };
 fclose($fp);
 	
-if ($iddancefile && is_file($path_to_folder.'/photo.lib') && is_file($path_to_folder.'/url.lib')) {
-  $post_var['id_news']=$iddancefile;
-  //$post_var['fotofile']= base64_encode(file_get_contents($path_to_folder.'/photo.lib'));		
-  //$post_var['fotourl']= base64_encode(file_get_contents($path_to_folder.'/url.lib'));	
+if (is_file($path_to_folder.'/photo.lib') && is_file($path_to_folder.'/url.lib')) {
+  $post_var['md5']=$md5;
   $post = http_build_query($post_var);
   $options = array('http' =>
     array(
