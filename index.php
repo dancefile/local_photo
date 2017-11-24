@@ -20,12 +20,10 @@ if (isset($_GET["url"])) $u= $_GET["url"];
 <html>
 <head>
 	<title>Foto</title>
-
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
 	<script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="./js/jquery.lazy.min.js"></script>
-	<script type="text/javascript" src="./js/gal.js?ver=2"></script>
+	<script type="text/javascript" src="./js/gal.js?ver=3"></script>
 	<script type="text/javascript">
 var basket=false;
 var fotograf=[];
@@ -185,7 +183,8 @@ var fotograf=[];
 
 	<?
 	if (!$shortView){
-		$query = 'SELECT id,name FROM url where  parent=\''.$u.'\'  and name != "NO" ORDER BY `url`.`name` ASC;';
+		 if (isset($_SESSION['login'])) {$query = 'SELECT id,name FROM url where  parent=\''.$u.'\'  ORDER BY `url`.`name` ASC;';}
+			else {$query = 'SELECT id,name FROM url where  parent=\''.$u.'\'  and name != "NO" ORDER BY `url`.`name` ASC;';};
 		 $rs = $mysqli->query($query) or die('error');
 		while ($line = mysqli_fetch_array($rs)) {
 		echo '<a href="?url='.$line["id"].'" class="link1">'.$line["name"].'</a>';

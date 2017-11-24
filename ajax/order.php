@@ -73,14 +73,7 @@ add_str_to_im('.',10);
 
 imagejpeg($im,'../tmp\1.jpg',100);
 imagedestroy($im);
-unset($_SESSION['name']);
-unset($_SESSION['cd']);
-unset($_SESSION['a6']);
-unset($_SESSION['a5']);
-unset($_SESSION['a4']);
-unset($_SESSION['comm']);
-unset($_SESSION['comm']);
-unset($_SESSION['mail']);
+
 /*$post_var=array();
 $post_var['foto_file']= base64_encode(file_get_contents('..\tmp\1.jpg'));			
   $post = http_build_query($post_var);
@@ -96,6 +89,14 @@ $post_var['foto_file']= base64_encode(file_get_contents('..\tmp\1.jpg'));
     $result = file_get_contents('http://192.168.0.2/print.php', false, $context);*/
 exec('C:\Apache24\htdocs\exe\print.exe C:\Apache24\htdocs\tmp\1.jpg "'.$price['printer'].'"');
 }
+unset($_SESSION['name']);
+unset($_SESSION['cd']);
+unset($_SESSION['a6']);
+unset($_SESSION['a5']);
+unset($_SESSION['a4']);
+unset($_SESSION['comm']);
+unset($_SESSION['comm']);
+unset($_SESSION['mail']);
 
 echo '<h1>'.ordernamber.$zakazNomer.'<br>';
 echo total.' '.$totalprice.'  '.$price['curence'].'<br> ';

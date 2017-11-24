@@ -423,22 +423,28 @@ location.reload();
 });
 });	
 
-
-$('.inputAddKat').change(function(){
- $.get('ajax/editKat.php?add='+this.id.substring(3)+'&name='+$(this).val())
-  .success(function() {
-location.reload();	
-});
-});
-	
 $('.inputLink').change(function(){
- $.get('ajax/editKat.php?id='+this.id.substring(3)+'&name='+$(this).val())
-  .success(function(data) {
-location.reload();
-  });	
-	
+var params = {id:this.id.substring(3),name:$(this).val()};
+$.ajax({
+type: "POST",
+url: "ajax/editKat.php",
+data: params,
+success: function(data){
+location.reload();	
+}
+});
 });	
-
+$('.inputAddKat').change(function(){
+var params = {add:this.id.substring(3),name:$(this).val()};
+$.ajax({
+type: "POST",
+url: "ajax/editKat.php",
+data: params,
+success: function(data){
+location.reload();	
+}
+});
+});	
 
 $('.imLink').click(function(){
 var id=this.id;
