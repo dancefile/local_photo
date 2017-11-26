@@ -1,4 +1,8 @@
 <?
+if (!file_exists('tmp')) mkdir ('tmp');
+if (!file_exists('pm')) mkdir ('pm');
+if (!file_exists('ps')) mkdir ('ps');
+
 $hostname = "127.0.0.1";
 $username = "root";
 $password = "1122";
@@ -10,9 +14,7 @@ if ($mysqli->connect_error) {
 if (!$mysqli->query("DROP DATABASE IF EXISTS `dancefile`;")) {
         printf("Error: %s\n", $mysqli->error);
     }
-//if (!$mysqli->query("DROP USER 'dancefile';")) {
- //       printf("Error: %s\n", $mysqli->error);
-  //  }
+
 
 if (!$mysqli->query("DROP USER 'dancefile'@'localhost';")) {
         printf("Error: %s\n", $mysqli->error);
