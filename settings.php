@@ -67,7 +67,7 @@ if(isset($_POST['saveurl'])) {
 $_POST['url']=trim($_POST['url']);
 $last=substr($_POST['url'],-1);
 if ($last == "/" || $last == "\\") $_POST['url'] = substr($_POST['url'],0,-1); 
-$mysqli->query("UPDATE `flash` SET url='".$mysqli->real_escape_string($_POST['url'])."' WHERE id = '".$_POST['id']."'");
+$mysqli->query('UPDATE `flash` SET url="'.$mysqli->real_escape_string($_POST['url']).'" WHERE id = '.$_POST['id']);
 header("Location: settings.php?a=flash");
 }
 if(isset($_POST['createuser'])) {
@@ -77,7 +77,7 @@ if(isset($_POST['createpath'])) {
 $_POST['url']=trim($_POST['newpath']);
 $last=substr($_POST['newpath'],-1);
 if ($last == "/" || $last == "\\") $_POST['newpath'] = substr($_POST['newpath'],0,-1);
-$mysqli->query("INSERT INTO `flash` (url) VALUES('".$_POST['newpath']."')");
+$mysqli->query('INSERT INTO `flash` (url) VALUES("'.$mysqli->real_escape_string($_POST['newpath']).'")');
 header("Location: settings.php?a=flash");
 }
 if(isset($_POST['createfotograf'])) {
